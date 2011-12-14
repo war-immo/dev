@@ -3,7 +3,7 @@ package de.zorgk.drums;
 import java.util.LinkedList;
 import java.util.Random;
 
-public class HumanizedStraightBlastBeat implements RiffInterface {
+public class HumanizedStraightBlastBeat implements RiffInterface, Cloneable {
 	
 	boolean started;
 	long beatsPerMinute;
@@ -96,6 +96,12 @@ public class HumanizedStraightBlastBeat implements RiffInterface {
 		
 		
 		return false;
+	}
+	
+	@Override
+	public RiffInterface getClone() throws CloneNotSupportedException {
+	
+		return (RiffInterface)this.clone();
 	}
 
 }

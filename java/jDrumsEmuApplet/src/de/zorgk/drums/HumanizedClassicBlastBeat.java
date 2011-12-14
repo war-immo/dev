@@ -3,7 +3,7 @@ package de.zorgk.drums;
 import java.util.LinkedList;
 import java.util.Random;
 
-public class HumanizedClassicBlastBeat implements RiffInterface {
+public class HumanizedClassicBlastBeat implements RiffInterface, Cloneable {
 	
 	boolean started;
 	long beatsPerMinute;
@@ -21,7 +21,7 @@ public class HumanizedClassicBlastBeat implements RiffInterface {
 	float ordTop2Sigma;
 	
 	HitInterface kick, snare, hihat;
-	
+		
 	public HumanizedClassicBlastBeat(long bpm, long hits, float accuracyInMs, float openClosed, float openClosed2Sigma, float ordTop, float ordTop2Sigma, SamplerSetup sampler) {
 		this.beatsPerMinute = bpm;
 		this.count = hits;
@@ -58,6 +58,8 @@ public class HumanizedClassicBlastBeat implements RiffInterface {
 		this.ordTop = ordTop;
 		this.ordTop2Sigma = ordTop2Sigma;
 	}
+	
+	
 
 	@Override
 	public boolean timeElapse(long framestart, long framenextstart,
@@ -94,4 +96,11 @@ public class HumanizedClassicBlastBeat implements RiffInterface {
 		return false;
 	}
 
+	
+	@Override
+	public RiffInterface getClone() throws CloneNotSupportedException  {
+	
+			return (RiffInterface)this.clone();
+		
+	}
 }

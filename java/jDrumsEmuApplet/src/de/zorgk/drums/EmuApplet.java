@@ -39,6 +39,12 @@ public class EmuApplet extends JApplet {
 
 			return false;
 		}
+		
+		@Override
+		public RiffInterface getClone() {
+		
+			return this;
+		}
 	}
 
 	public class playbackDriver implements LineListener, Runnable {
@@ -142,12 +148,11 @@ public class EmuApplet extends JApplet {
 					to_line.pop();
 					if (nbr == 0) {
 						
-						trampoline.push(new HumanizedLeapBlastBeat(400, 16,10.f, 0.3f, 0.1f,
-								                        0.4f, 0.2f,sampler));
-						trampoline.push(new HumanizedClassicBlastBeat(400, 16,10.f, 0.7f, 0.1f,
-		                        0.2f, 0.2f,sampler));
-						trampoline.push(new HumanizedStraightBlastBeat(400, 16,10.f, 0.8f, 0.1f,
-		                        0.8f, 0.2f,sampler));
+						RiffInterface[] riffs = {new HumanizedLeapBlastBeat(400, 16,10.f, 0.3f, 0.1f,
+								                        0.4f, 0.2f,sampler), new RestRiff(120,2)};
+						
+						
+						trampoline.push(new RiffChain(riffs,3));
 						out("-->.");
 					} else {
 						out("\nunknown to_line: " + nbr + ", " + o.toString());

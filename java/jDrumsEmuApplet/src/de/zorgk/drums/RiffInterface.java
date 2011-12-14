@@ -22,5 +22,10 @@ public interface RiffInterface {
 	 */
 	boolean timeElapse(long framestart, long framenextstart, LinkedList<RiffInterface> stack, SamplerSetup sampler);
 
-	
+	/**
+	 * clone the interface object, such that it can be processed independently
+	 * 
+	 * @return    copy
+	 */
+	RiffInterface getClone() throws CloneNotSupportedException;
 }
