@@ -3,6 +3,13 @@ package de.zorgk.drums;
 import java.util.LinkedList;
 import java.util.Random;
 
+/**
+ * class to test some concepts
+ * 
+ * @author immanuel
+ *
+ */
+
 public class HumanizedStraightBlastBeat implements RiffInterface, Cloneable {
 	
 	boolean started;

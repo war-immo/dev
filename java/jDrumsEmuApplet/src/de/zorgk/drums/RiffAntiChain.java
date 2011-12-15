@@ -51,6 +51,7 @@ public class RiffAntiChain implements RiffInterface {
 					e.printStackTrace();
 				}
 			}
+			parallelStacks.add(stack);
 		}
 	}
 	
@@ -71,6 +72,7 @@ public class RiffAntiChain implements RiffInterface {
 				if (local_stack.isEmpty() == false) still_going = true;
 			}			
 		}
+		
 		
 		return ! still_going;
 	}

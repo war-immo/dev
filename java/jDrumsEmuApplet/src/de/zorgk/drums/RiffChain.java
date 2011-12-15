@@ -19,13 +19,13 @@ public class RiffChain implements RiffInterface {
 	public RiffChain(RiffInterface[] riffs) {
 		this.riffs = riffs;
 	}
-	
+
 	public RiffChain(RiffInterface[] riffs, int repeat) {
-		this.riffs = new RiffInterface[riffs.length*repeat];
-		int j=0;
-		for (int i=0;i<repeat;++i) {
-			for (int c=0;c<riffs.length;++c,++j) {
-				if (i>0)
+		this.riffs = new RiffInterface[riffs.length * repeat];
+		int j = 0;
+		for (int i = 0; i < repeat; ++i) {
+			for (int c = 0; c < riffs.length; ++c, ++j) {
+				if (i > 0)
 					try {
 						this.riffs[j] = riffs[c].getClone();
 					} catch (CloneNotSupportedException e) {
@@ -35,6 +35,21 @@ public class RiffChain implements RiffInterface {
 					this.riffs[j] = riffs[c];
 			}
 		}
+	}
+
+	public RiffChain(RiffInterface riff, int repeat) {
+		this.riffs = new RiffInterface[repeat];
+		riffs[0] = riff;
+
+		for (int i = 1; i < repeat; ++i) {
+			try {
+				this.riffs[i] = riff.getClone();
+			} catch (CloneNotSupportedException e) {
+				e.printStackTrace();
+			}
+
+		}
+
 	}
 
 	public RiffChain(RiffInterface a, RiffInterface b) {
@@ -52,22 +67,23 @@ public class RiffChain implements RiffInterface {
 		if (stack.peek() != this)
 			throw new RuntimeErrorException(null,
 					"RiffChain must be on top for timeElapse!!");
-		
+
 		stack.pop();
 
 		for (int j = this.riffs.length - 1; 0 <= j; j--) {
 			stack.push(riffs[j]);
 		}
 
-		return stack.peek().timeElapse(framestart, framenextstart, stack, sampler);
+		return stack.peek().timeElapse(framestart, framenextstart, stack,
+				sampler);
 	}
-	
+
 	@Override
 	public RiffInterface getClone() throws CloneNotSupportedException {
 		RiffInterface[] copy = new RiffInterface[riffs.length];
-		for (int i=0;i<riffs.length;++i)
+		for (int i = 0; i < riffs.length; ++i)
 			copy[i] = riffs[i].getClone();
-	
+
 		return new RiffChain(copy);
 	}
 

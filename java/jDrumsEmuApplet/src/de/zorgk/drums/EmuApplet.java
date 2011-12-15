@@ -149,10 +149,11 @@ public class EmuApplet extends JApplet {
 					if (nbr == 0) {
 						
 						RiffInterface[] riffs = {new HumanizedLeapBlastBeat(400, 16,10.f, 0.3f, 0.1f,
-								                        0.4f, 0.2f,sampler), new RestRiff(120,2)};
+								                        0.4f, 0.2f,sampler), new RestRiff(4,0.18f)};
 						
 						
-						trampoline.push(new RiffChain(riffs,3));
+						trampoline.push(new RiffChain(new RiffAntiChain(riffs),
+								new SimpleHitsRiff(240, 0.5f, 16, sampler.instruments.get("kick"),0.f)));
 						out("-->.");
 					} else {
 						out("\nunknown to_line: " + nbr + ", " + o.toString());
