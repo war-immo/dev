@@ -3,19 +3,19 @@ package de.zorgk.drums;
 import java.util.ArrayList;
 
 /**
- * Riff XML chain handler
+ * Riff XML anti-chain handler
  * 
  * @author immanuel
  * 
  */
 
-public class XmlChain implements RiffXmlInterface {
+public class XmlAntiChain implements RiffXmlInterface {
 
 	private ArrayList<RiffInterface> riffs;
 
 	private RiffXmlAttributes attributes;
 
-	public XmlChain(RiffXmlAttributes attributes) {
+	public XmlAntiChain(RiffXmlAttributes attributes) {
 		riffs = new ArrayList<RiffInterface>();
 		this.attributes = attributes;
 	}
@@ -27,13 +27,7 @@ public class XmlChain implements RiffXmlInterface {
 		for (int i = 0; i < riffArray.length; ++i)
 			riffArray[i] = riffs.get(i);
 
-		try {
-			return new RiffChain(riffArray, Integer.parseInt(attributes
-					.getAttribute("Repeat")));
-		} catch (Exception e) {
-			return new RiffChain(riffArray);
-		}
-
+		return new RiffAntiChain(riffArray);
 	}
 
 	@Override

@@ -11,7 +11,7 @@ public interface RiffXmlInterface {
 
 	/**
 	 * 
-	 * @return corresponding RiffInterface
+	 * @return corresponding RiffInterface or <b>null</b>
 	 */
 	public RiffInterface getRiffInterface();
 

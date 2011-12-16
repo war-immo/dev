@@ -14,15 +14,15 @@ public class SimpleHitsRiff implements RiffInterface, Cloneable {
 	private long nextHit;
 	private float dB;
 
-	public SimpleHitsRiff(long beatsPerMinute, float beatsLength,
+	public SimpleHitsRiff(float beatsPerMinute, float beatsLength,
 			long hitCount, HitInterface drum, float dB) {
 		this.drum = drum;
 		this.dB = dB;
 		this.started = false;
 
-		this.samplesPerHit = (long) ((beatsLength
+		this.samplesPerHit = (long) (((beatsLength
 				* RiffInterface.framesPerSecond * 60))
-				/ (beatsPerMinute);
+				/ (beatsPerMinute));
 		this.count = hitCount;
 		this.nextHit = 0;
 

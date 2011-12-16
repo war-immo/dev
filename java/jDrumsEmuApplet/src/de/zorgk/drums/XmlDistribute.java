@@ -17,7 +17,7 @@ public class XmlDistribute implements RiffXmlInterface {
 
 	@Override
 	public RiffInterface getRiffInterface() {
-		return destination.getRiffInterface();
+		return null;
 	}
 
 	@Override

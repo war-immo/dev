@@ -19,12 +19,16 @@ public class RiffXmlHandler extends DefaultHandler {
 	private LinkedList<RiffXmlAttributes> attributeStack;
 	private LinkedList<RiffXmlInterface> riffStack;
 
-	public RiffXmlHandler() {
+	private SamplerSetup sampler;
+	
+	public RiffXmlHandler(SamplerSetup sampler) {
 		attributeStack = new LinkedList<RiffXmlAttributes>();
 		attributeStack.push(new RiffXmlAttributes());
 
 		riffStack = new LinkedList<RiffXmlInterface>();
 		riffStack.push(new XmlChain(attributeStack.peek()));
+		
+		this.sampler = sampler;
 	}
 
 	/**
@@ -51,8 +55,16 @@ public class RiffXmlHandler extends DefaultHandler {
 				attributes);
 		attributeStack.push(attrs);
 
-		if (qName.equals("chain")) {
+		if (qName.equalsIgnoreCase("chain") || qName.equalsIgnoreCase("meta")
+				|| qName.equalsIgnoreCase("c")) {
 			riffStack.push(new XmlChain(attributeStack.peek()));
+		} else if (qName.equalsIgnoreCase("antichain")
+				|| qName.equalsIgnoreCase("syn") || qName.equalsIgnoreCase("a")) {
+			riffStack.push(new XmlAntiChain(attributeStack.peek()));
+		} else if (qName.equalsIgnoreCase("rest")
+				|| qName.equalsIgnoreCase("pause")
+				|| qName.equalsIgnoreCase("r")) {
+			riffStack.push(new XmlRest(riffStack.peek(),attributeStack.peek()));
 		} else { // unknown or decorating tag, use XmlDistribute
 			riffStack.push(new XmlDistribute(riffStack.peek()));
 		}
