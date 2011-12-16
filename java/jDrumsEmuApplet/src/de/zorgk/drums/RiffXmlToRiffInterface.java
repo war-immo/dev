@@ -26,8 +26,9 @@ public class RiffXmlToRiffInterface {
 	 * @throws IOException
 	 */
 
-	public static RiffInterface transformStream(InputStream input, SamplerSetup sampler)
-			throws ParserConfigurationException, SAXException, IOException {
+	public static RiffInterface transformStream(InputStream input,
+			SamplerSetup sampler) throws ParserConfigurationException,
+			SAXException, IOException {
 
 		/**
 		 * I/O handling in UTF-8
@@ -48,16 +49,19 @@ public class RiffXmlToRiffInterface {
 		return handler.getRiffInterface();
 	};
 
-	public static RiffInterface transformXml(String xmlData, SamplerSetup sampler)
-			throws ParserConfigurationException, SAXException, IOException {
+	public static RiffInterface transformXml(String xmlData,
+			SamplerSetup sampler) throws ParserConfigurationException,
+			SAXException, IOException {
 		if (xmlData.startsWith("<?xml"))
-			return transformStream(new ByteArrayInputStream(
-					xmlData.getBytes("UTF-8")),sampler);
+			return transformStream(
+					new ByteArrayInputStream(xmlData.getBytes("UTF-8")),
+					sampler);
 		else {
 			String hackedData = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
 					+ xmlData;
-			return transformStream(new ByteArrayInputStream(
-					hackedData.getBytes("UTF-8")),sampler);
+			return transformStream(
+					new ByteArrayInputStream(hackedData.getBytes("UTF-8")),
+					sampler);
 		}
 	};
 

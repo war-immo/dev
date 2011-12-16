@@ -1,6 +1,8 @@
 package de.zorgk.drums;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import org.xml.sax.Attributes;
 
@@ -22,33 +24,27 @@ public class RiffXmlAttributes {
 	private float speedFactor;
 	private float bpm;
 	private float length;
+	private float part;
+	private float dB;
+	private ArrayList<HitDecorator> decoratorChain;
+	private HitInterface drum;
+	private HitInterface decoratedDrum;
+	private SamplerSetup sampler;
 
 	/**
 	 * constructor for root node attributes (e.g. defaults)
 	 */
-	public RiffXmlAttributes() {
+	public RiffXmlAttributes(SamplerSetup sampler) {
 		this.attributes = new HashMap<String, String>();
 		this.speedFactor = 1.f;
 		this.length = 1.f;
 		this.bpm = 120.f;
-	}
-	
-	/**
-	 * 
-	 * @return current effective bpm settings
-	 */
-	
-	public float getBeatsPerMinute() {
-		return this.bpm * this.speedFactor;
-	}
-	
-	/**
-	 * 
-	 * @return current length
-	 */
-	
-	public float getLength() {
-		return this.length;
+		this.part = 1.f;
+		this.decoratorChain = new ArrayList<HitDecorator>();
+		this.sampler = sampler;
+		this.drum = sampler.instruments.get("snare");
+		this.decoratedDrum = this.drum;
+		this.dB = 0.f;
 	}
 
 	/**
@@ -63,14 +59,35 @@ public class RiffXmlAttributes {
 	 */
 
 	public RiffXmlAttributes(RiffXmlAttributes parent, Attributes attributes) {
-		this.attributes = new HashMap<String, String>(parent.attributes);
+		this.attributes = new HashMap<String, String>();
+
+		for (Iterator<String> it_qnames = parent.attributes.keySet().iterator(); it_qnames
+				.hasNext();) {
+			String qName = it_qnames.next();
+
+			if (Character.isUpperCase(qName.charAt(0)) != true) {
+				this.attributes.put(qName, parent.attributes.get(qName));
+			}
+		}
+
 		this.speedFactor = parent.speedFactor;
 		this.bpm = parent.bpm;
 		this.length = parent.length;
+		this.part = parent.part;
+		this.decoratorChain = new ArrayList<HitDecorator>(parent.decoratorChain);
+		this.sampler = parent.sampler;
+		this.drum = parent.drum;
+		this.decoratedDrum = parent.decoratedDrum;
+		this.dB = parent.dB;
 
 		copyAttributes(attributes);
 	}
 
+	/**
+	 * parse XML tag attributes, used in the constructors
+	 * 
+	 * @param attributes
+	 */
 	private void copyAttributes(Attributes attributes) {
 		for (int i = 0; i < attributes.getLength(); ++i) {
 			String qName = attributes.getQName(i);
@@ -79,13 +96,12 @@ public class RiffXmlAttributes {
 			/**
 			 * canonical attribute management
 			 */
-			if (Character.isUpperCase(qName.charAt(0)) != true)
-				this.attributes.put(qName, value);
+			this.attributes.put(qName, value);
 
-			try{
-			/**
-			 * special attribute management
-			 */
+			try {
+				/**
+				 * special attribute management
+				 */
 				if (qName.equalsIgnoreCase("length")) {
 					this.length = Float.parseFloat(value);
 				} else if (qName.equalsIgnoreCase("length_")) {
@@ -94,13 +110,61 @@ public class RiffXmlAttributes {
 					this.bpm = Float.parseFloat(value);
 				} else if (qName.equalsIgnoreCase("bpm_")) {
 					this.bpm *= Float.parseFloat(value);
+				} else if (qName.equalsIgnoreCase("part")) {
+					this.part = Float.parseFloat(value);
+				} else if (qName.equalsIgnoreCase("part_")) {
+					this.part *= Float.parseFloat(value);
+				} else if (qName.equalsIgnoreCase("db")) {
+					this.dB = Float.parseFloat(value);
+				} else if (qName.equalsIgnoreCase("db_")) {
+					this.dB += Float.parseFloat(value);
+				} else if (qName.equalsIgnoreCase("drum")) {
+					this.drum = sampler.instruments.get(value);
+					decorateInstrument();
 				}
 			} catch (Exception e) {
-				System.err.println("Error in XML attributes: "+qName+", "+value+": "+e);
+				System.err.println("Error in XML attributes: " + qName + ", "
+						+ value + ": " + e);
 			}
 
 		}
 
+	}
+
+	/**
+	 * apply all decorators to the current drum
+	 */
+	private void decorateInstrument() {
+		boolean[] is_canceled = new boolean[decoratorChain.size()];
+
+		for (int i = 0; i < is_canceled.length; ++i)
+			is_canceled[i] = false;
+
+		/**
+		 * check for canceling decorators
+		 */
+
+		for (int j = is_canceled.length - 1; j >= 0; --j) {
+			if (is_canceled[j] != true) {
+				for (int i = 0; i < j; ++i) {
+					if (is_canceled[i] != true) {
+						if (decoratorChain.get(j).cancelsOut(
+								decoratorChain.get(i))) {
+							is_canceled[i] = true;
+						}
+					}
+				}
+			}
+		}
+
+		HitInterface intermediate = this.drum;
+		for (int j = is_canceled.length - 1; j >= 0; --j) {
+			if (is_canceled[j] != true) {
+				intermediate = decoratorChain.get(j).decorate(intermediate);
+			}
+		}
+
+		this.decoratedDrum = intermediate;
 	}
 
 	/**
@@ -112,6 +176,57 @@ public class RiffXmlAttributes {
 	 */
 	public String getAttribute(String qName) {
 		return attributes.get(qName);
+	}
+
+	/**
+	 * 
+	 * @return current effective bpm settings
+	 */
+
+	public float getBeatsPerMinute() {
+		return this.bpm * this.speedFactor;
+	}
+
+	/**
+	 * 
+	 * @return current length
+	 */
+
+	public float getLength() {
+		return this.length;
+	}
+
+	/**
+	 * 
+	 * @return current part length
+	 */
+
+	public float getPartLength() {
+		return this.part;
+	}
+
+	/**
+	 * 
+	 * @return current dB value for hits
+	 */
+	public float getDeziBel() {
+		return this.dB;
+	}
+
+	/**
+	 * 
+	 * @return the sampler object
+	 */
+	public SamplerSetup getSampler() {
+		return this.sampler;
+	}
+
+	/**
+	 * 
+	 * @return HitInterface that corresponds to the current decorated drum
+	 */
+	public HitInterface getDrum() {
+		return this.decoratedDrum;
 	}
 
 }

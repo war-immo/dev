@@ -7,6 +7,13 @@ import java.util.*;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
+/**
+ * handles the setup of drum instruments: responsible for the creation of the
+ * HitInterfaces and the name map
+ * 
+ * @author immanuel
+ * 
+ */
 public class SamplerSetup {
 
 	public static final String[] named_resources = { "kick1",

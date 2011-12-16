@@ -163,9 +163,11 @@ public class EmuApplet extends JApplet {
 						out("-->.");
 
 						try {
-							trampoline.push(
-							RiffXmlToRiffInterface
-									.transformXml("<riff><rest length=\"2.f\"/> </riff>",sampler));
+							trampoline
+									.push(RiffXmlToRiffInterface
+											.transformXml(
+													"<riff><rest length=\"2.f\"/><chain Repeat=\"8\" length=\"1.f\" bpm=\"120\"><c><hits drum=\"kick\" length=\"4\" part=\"0.25\" /></c></chain></riff>",
+													sampler));
 						} catch (ParserConfigurationException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();

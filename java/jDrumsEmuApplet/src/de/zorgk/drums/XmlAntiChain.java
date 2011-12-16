@@ -13,11 +13,8 @@ public class XmlAntiChain implements RiffXmlInterface {
 
 	private ArrayList<RiffInterface> riffs;
 
-	private RiffXmlAttributes attributes;
-
 	public XmlAntiChain(RiffXmlAttributes attributes) {
 		riffs = new ArrayList<RiffInterface>();
-		this.attributes = attributes;
 	}
 
 	@Override

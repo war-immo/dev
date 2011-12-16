@@ -1,10 +1,10 @@
 package de.zorgk.drums;
 
 public class XmlRest implements RiffXmlInterface {
-	
+
 	private RiffXmlInterface parent;
 	private RiffXmlAttributes attributes;
-	
+
 	public XmlRest(RiffXmlInterface parent, RiffXmlAttributes attributes) {
 		this.parent = parent;
 		this.attributes = attributes;
@@ -12,7 +12,8 @@ public class XmlRest implements RiffXmlInterface {
 
 	@Override
 	public RiffInterface getRiffInterface() {
-		return new RestRiff(attributes.getBeatsPerMinute(), attributes.getLength());
+		return new RestRiff(attributes.getBeatsPerMinute(),
+				attributes.getLength());
 	}
 
 	@Override

@@ -19,16 +19,13 @@ public class RiffXmlHandler extends DefaultHandler {
 	private LinkedList<RiffXmlAttributes> attributeStack;
 	private LinkedList<RiffXmlInterface> riffStack;
 
-	private SamplerSetup sampler;
-	
 	public RiffXmlHandler(SamplerSetup sampler) {
 		attributeStack = new LinkedList<RiffXmlAttributes>();
-		attributeStack.push(new RiffXmlAttributes());
+		attributeStack.push(new RiffXmlAttributes(sampler));
 
 		riffStack = new LinkedList<RiffXmlInterface>();
 		riffStack.push(new XmlChain(attributeStack.peek()));
-		
-		this.sampler = sampler;
+
 	}
 
 	/**
@@ -64,7 +61,18 @@ public class RiffXmlHandler extends DefaultHandler {
 		} else if (qName.equalsIgnoreCase("rest")
 				|| qName.equalsIgnoreCase("pause")
 				|| qName.equalsIgnoreCase("r")) {
-			riffStack.push(new XmlRest(riffStack.peek(),attributeStack.peek()));
+			riffStack
+					.push(new XmlRest(riffStack.peek(), attributeStack.peek()));
+		} else if (qName.equalsIgnoreCase("hit")
+				|| qName.equalsIgnoreCase("kick")
+				|| qName.equalsIgnoreCase("stroke")
+				|| qName.equalsIgnoreCase("h")) {
+			riffStack.push(new XmlHit(riffStack.peek(), attributeStack.peek()));
+		} else if (qName.equalsIgnoreCase("hits")
+				|| qName.equalsIgnoreCase("kicks")
+				|| qName.equalsIgnoreCase("strokes")
+				|| qName.equalsIgnoreCase("hs")) {
+			riffStack.push(new XmlHits(riffStack.peek(), attributeStack.peek()));
 		} else { // unknown or decorating tag, use XmlDistribute
 			riffStack.push(new XmlDistribute(riffStack.peek()));
 		}

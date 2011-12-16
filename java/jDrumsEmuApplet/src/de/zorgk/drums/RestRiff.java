@@ -14,8 +14,7 @@ public class RestRiff implements RiffInterface, Cloneable {
 	private long samples_left;
 
 	public RestRiff(float beatsPerMinute, float beats) {
-		this.samples_left = (long) (((beats * RiffInterface.framesPerSecond * 60))
-				/ (beatsPerMinute));
+		this.samples_left = (long) (((beats * RiffInterface.framesPerSecond * 60)) / (beatsPerMinute));
 	}
 
 	@Override
