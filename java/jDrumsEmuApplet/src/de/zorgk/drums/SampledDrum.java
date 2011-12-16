@@ -28,14 +28,14 @@ public class SampledDrum implements HitInterface {
 	long next_level31 = functionTables.toLvl31(functionTables.dBtoGain(0));
 
 	@Override
-	public void setFloat(long nbr, float value) {		
+	public void setFloat(long nbr, float value) {
 	}
-	
+
 	@Override
 	public float getFloat(long nbr) {
 		return 0;
 	}
-	
+
 	public void hit(long frame) {
 		next_level31 = level31;
 		next_hit = frame;
@@ -133,8 +133,8 @@ public class SampledDrum implements HitInterface {
 				buffer[i] = buffer[i] << 16;
 			}
 		}
-		
-		relative_frame = -length-1;
+
+		relative_frame = -length - 1;
 
 	}
 
@@ -148,7 +148,7 @@ public class SampledDrum implements HitInterface {
 			} else {
 				relative_frame = -length;
 			}
-			
+
 		} else if ((framestart < next_hit) && (next_hit < framestart + samples)) {
 			addToBuffer(framestart, o_buffer, (int) (next_hit - framestart),
 					offset);
@@ -177,7 +177,7 @@ public class SampledDrum implements HitInterface {
 			}
 		}
 	}
-	
+
 	@Override
 	public long howManyNamedParameters() {
 		return 0;
@@ -189,34 +189,36 @@ public class SampledDrum implements HitInterface {
 	}
 
 	@Override
-	public String getParameterName(long nbr) { 
+	public String getParameterName(long nbr) {
 		throw new IllegalArgumentException("parameter unknown");
 	}
 
 	@Override
 	public long getParameterNbrName(String name) {
-		throw new IllegalArgumentException("parameter unknown");		
+		throw new IllegalArgumentException("parameter unknown");
 	}
-	
+
 	@Override
 	public Object exportAllParameters() {
-		Map<Long, Float> parameterValues = new TreeMap<Long,Float>();
+		Map<Long, Float> parameterValues = new TreeMap<Long, Float>();
 		long count = this.howManyNamedParameters();
-		for (long i=0; i < count; ++i) {
-			parameterValues.put(getParameterNbr(i), getFloat(getParameterNbr(i)));
+		for (long i = 0; i < count; ++i) {
+			parameterValues.put(getParameterNbr(i),
+					getFloat(getParameterNbr(i)));
 		}
-		
+
 		return parameterValues;
 	}
-	
+
 	@Override
 	public void restoreParameters(Object previousState) {
 		@SuppressWarnings("unchecked")
 		Map<Long, Float> parameterValues = (Map<Long, Float>) previousState;
-		
-		for (Iterator<Long> it = parameterValues.keySet().iterator(); it.hasNext();)  {
+
+		for (Iterator<Long> it = parameterValues.keySet().iterator(); it
+				.hasNext();) {
 			long p = it.next();
-			setFloat(p,parameterValues.get(p));
+			setFloat(p, parameterValues.get(p));
 		}
 	}
 

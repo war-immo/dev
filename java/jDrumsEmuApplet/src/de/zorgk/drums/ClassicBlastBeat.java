@@ -27,8 +27,7 @@ public class ClassicBlastBeat implements RiffInterface, Cloneable {
 		this.snare = sampler.instruments.get("snare");
 		this.hihat = sampler.instruments.get("hh");
 	}
-	
-	
+
 	@Override
 	public boolean timeElapse(long framestart, long framenextstart,
 			LinkedList<RiffInterface> stack, SamplerSetup sampler) {
@@ -63,7 +62,7 @@ public class ClassicBlastBeat implements RiffInterface, Cloneable {
 
 	@Override
 	public RiffInterface getClone() throws CloneNotSupportedException {
-		
-		return (RiffInterface)this.clone();
+
+		return (RiffInterface) this.clone();
 	}
 }

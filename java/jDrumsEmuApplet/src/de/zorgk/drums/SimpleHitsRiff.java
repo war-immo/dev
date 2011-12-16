@@ -2,13 +2,12 @@ package de.zorgk.drums;
 
 import java.util.LinkedList;
 
-
 public class SimpleHitsRiff implements RiffInterface, Cloneable {
 
 	private HitInterface drum;
 
 	private boolean started;
-	private long beatsPerMinute;
+
 	private long samplesPerHit;
 	private long count;
 	private long startFrame;
@@ -20,14 +19,13 @@ public class SimpleHitsRiff implements RiffInterface, Cloneable {
 		this.drum = drum;
 		this.dB = dB;
 		this.started = false;
-		this.beatsPerMinute = beatsPerMinute;
-		this.samplesPerHit =(long) ( (beatsLength
+
+		this.samplesPerHit = (long) ((beatsLength
 				* RiffInterface.framesPerSecond * 60))
 				/ (beatsPerMinute);
 		this.count = hitCount;
 		this.nextHit = 0;
-		
-		System.out.println(samplesPerHit);
+
 
 	}
 
@@ -41,15 +39,13 @@ public class SimpleHitsRiff implements RiffInterface, Cloneable {
 			drum.hit(framestart, dB);
 			nextHit = 1;
 
-
 			return false;
 		}
 
 		long next_hit_frame = startFrame + samplesPerHit * nextHit;
 
 		if (framestart <= next_hit_frame && next_hit_frame < framenextstart) {
-			if (nextHit >= count)
-			{
+			if (nextHit >= count) {
 
 				return true;
 			}
@@ -57,7 +53,7 @@ public class SimpleHitsRiff implements RiffInterface, Cloneable {
 			this.drum.hit(next_hit_frame, dB);
 
 			this.nextHit++;
-		} 
+		}
 
 		return false;
 	}
