@@ -17,6 +17,8 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
 
 import java.awt.event.*;
+import java.awt.Font;
+import java.awt.Color;
 
 public class EmuApplet extends JApplet {
 
@@ -150,24 +152,21 @@ public class EmuApplet extends JApplet {
 					int nbr = to_line.info();
 					Object o = to_line.object();
 					to_line.pop();
-					if (nbr == 0) {
-
-						RiffInterface[] riffs = {
-								new HumanizedLeapBlastBeat(400, 16, 10.f, 0.3f,
-										0.1f, 0.4f, 0.2f, sampler),
-								new RestRiff(4, 0.18f) };
-
-						trampoline.push(new RiffChain(new RiffAntiChain(riffs),
-								new SimpleHitsRiff(240, 0.5f, 16,
-										sampler.instruments.get("kick"), 0.f)));
-						out("-->.");
-
+					switch(nbr) {
+					case 0:
+						trampoline = new LinkedList<RiffInterface>();
+						trampoline.push(new EmptyRiff());
+						break;
+					case 1:
+						trampoline.push(new EmptyRiff());
+						break;
+					case 2:
+						if (trampoline.size()>1)
+							trampoline.pop();
+						break;
+					case 3:
 						try {
-							trampoline
-									.push(RiffXmlToRiffInterface
-											.transformXml(
-													"<riff><rest length=\"2.f\"/><chain Repeat=\"8\" length=\"1.f\" bpm=\"120\"><c><hits drum=\"kick\" length=\"4\" part=\"0.25\" /></c></chain></riff>",
-													sampler));
+							trampoline.push(RiffXmlToRiffInterface.transformXml((String)o, sampler));
 						} catch (ParserConfigurationException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -178,9 +177,11 @@ public class EmuApplet extends JApplet {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-					} else {
-						out("\nunknown to_line: " + nbr + ", " + o.toString());
+						break;
+						default:
+							out("\nunknown to_line: " + nbr + ", " + o.toString());	
 					}
+					
 
 				}
 
@@ -210,6 +211,7 @@ public class EmuApplet extends JApplet {
 
 	JTextArea textArea = null;
 	private JTextField textField;
+	private JTextArea textRiffXml;
 
 	/**
 	 * Create the applet.
@@ -264,17 +266,48 @@ public class EmuApplet extends JApplet {
 
 		JScrollPane scrollPane_1 = new JScrollPane();
 		tabbedPane.addTab("Control", null, scrollPane_1, null);
-
-		JButton btnTest = new JButton("Test!");
-		btnTest.addActionListener(new ActionListener() {
+		
+		JToolBar toolBar = new JToolBar();
+		scrollPane_1.setColumnHeaderView(toolBar);
+		
+		JButton btnStop = new JButton("Stop");
+		btnStop.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				to_line.push(0, "Test!");
+				to_line.push(0, "Stop");
 			}
 		});
-		scrollPane_1.setColumnHeaderView(btnTest);
-
-		tabbedPane.setSelectedComponent(scrollPane_1);
-
+		toolBar.add(btnStop);
+		
+		JButton btnPause = new JButton("Pause");
+		btnPause.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				to_line.push(1, "Pause");
+			}
+		});
+		toolBar.add(btnPause);
+		
+		JButton btnNext = new JButton("Next");
+		btnNext.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				to_line.push(2, "Next");
+			}
+		});
+		toolBar.add(btnNext);
+		
+		JButton btnAddRiffXml = new JButton("Add Riff XML (below)");
+		btnAddRiffXml.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				to_line.push(3, textRiffXml.getText());
+			}
+		});
+		toolBar.add(btnAddRiffXml);
+		
+		textRiffXml = new JTextArea();
+		textRiffXml.setText("<riff>\n<chain Repeat=\"10\">\n   <hs length=\"4\" />\n</chain>\n</riff>");
+		textRiffXml.setBackground(Color.WHITE);
+		textRiffXml.setFont(new Font("Courier", Font.BOLD, 16));
+		scrollPane_1.setViewportView(textRiffXml);
+		
 		out("Build: " + build_nbr);
 		out("Desired format: " + format.toString());
 
