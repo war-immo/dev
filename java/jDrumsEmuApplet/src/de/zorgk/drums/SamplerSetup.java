@@ -37,6 +37,9 @@ public class SamplerSetup {
 			"kick2" } };
 
 	public SampledDrum[] drums;
+	/**
+	 * maps drum names to hit interfaces. NOTICE: only lowercase drum names can be accessed via Riff XML
+	 */
 	public Map<String, HitInterface> instruments;
 
 	public SamplerSetup(AudioFormat format)

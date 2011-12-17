@@ -30,6 +30,7 @@ public class RiffXmlAttributes {
 	private HitInterface drum;
 	private HitInterface decoratedDrum;
 	private SamplerSetup sampler;
+	private String drumName;
 
 	/**
 	 * constructor for root node attributes (e.g. defaults)
@@ -45,6 +46,7 @@ public class RiffXmlAttributes {
 		this.drum = sampler.instruments.get("snare");
 		this.decoratedDrum = this.drum;
 		this.dB = 0.f;
+		this.drumName = "";
 	}
 
 	/**
@@ -79,6 +81,7 @@ public class RiffXmlAttributes {
 		this.drum = parent.drum;
 		this.decoratedDrum = parent.decoratedDrum;
 		this.dB = parent.dB;
+		this.drumName = parent.drumName;
 
 		copyAttributes(attributes);
 	}
@@ -119,7 +122,8 @@ public class RiffXmlAttributes {
 				} else if (qName.equalsIgnoreCase("db_")) {
 					this.dB += Float.parseFloat(value);
 				} else if (qName.equalsIgnoreCase("drum")) {
-					this.drum = sampler.instruments.get(value);
+					this.drumName = value.toLowerCase();
+					this.drum = sampler.instruments.get(drumName);
 					decorateInstrument();
 				}
 			} catch (Exception e) {
@@ -149,7 +153,7 @@ public class RiffXmlAttributes {
 				for (int i = 0; i < j; ++i) {
 					if (is_canceled[i] != true) {
 						if (decoratorChain.get(j).cancelsOut(
-								decoratorChain.get(i))) {
+								decoratorChain.get(i), drumName)) {
 							is_canceled[i] = true;
 						}
 					}
@@ -160,7 +164,7 @@ public class RiffXmlAttributes {
 		HitInterface intermediate = this.drum;
 		for (int j = is_canceled.length - 1; j >= 0; --j) {
 			if (is_canceled[j] != true) {
-				intermediate = decoratorChain.get(j).decorate(intermediate);
+				intermediate = decoratorChain.get(j).decorate(intermediate, drumName);
 			}
 		}
 
