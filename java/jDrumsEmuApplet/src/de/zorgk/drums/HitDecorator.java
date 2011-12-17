@@ -27,6 +27,10 @@ public interface HitDecorator {
 	 * for example a decorator that overrides the dB parameter to -2. cancels
 	 * any hit decorator modifying just the dB parameter.
 	 * 
+	 * this function may return true even though both HitDecorators would not
+	 * cancel out each other, for instance to ensure that only one version of
+	 * your class affects the drum output
+	 * 
 	 * @param other
 	 * @param drumName
 	 *            name of the drum that is decorated

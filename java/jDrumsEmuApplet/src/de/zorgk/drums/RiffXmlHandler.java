@@ -72,14 +72,19 @@ public class RiffXmlHandler extends DefaultHandler {
 				|| qName.equalsIgnoreCase("kicks")
 				|| qName.equalsIgnoreCase("strokes")
 				|| qName.equalsIgnoreCase("hs")) {
-			riffStack.push(new XmlHits(riffStack.peek(), attributeStack.peek()));
+			riffStack
+					.push(new XmlHits(riffStack.peek(), attributeStack.peek()));
+		} else if (qName.equalsIgnoreCase("pattern")
+				|| qName.equalsIgnoreCase("p") || qName.equalsIgnoreCase("pat")) {
+			riffStack.push(new XmlPattern(riffStack.peek(), attributeStack
+					.peek()));
 		} else { // unknown or decorating tag, use XmlDistribute
 			riffStack.push(new XmlDistribute(riffStack.peek()));
 		}
 	}
 
 	/**
-	 * element ends, add tags to html output
+	 * element ends do riff output
 	 */
 
 	public void endElement(String uri, String localName, String qName)

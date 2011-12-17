@@ -26,6 +26,8 @@ public class SampledDrum implements HitInterface {
 	long level31 = functionTables.toLvl31(functionTables.dBtoGain(0));
 	long next_hit = -1;
 	long next_level31 = functionTables.toLvl31(functionTables.dBtoGain(0));
+	
+	float offsetDb;
 
 	@Override
 	public void setFloat(long nbr, float value) {
@@ -42,7 +44,7 @@ public class SampledDrum implements HitInterface {
 	}
 
 	public void hit(long frame, float dB) {
-		next_level31 = functionTables.toLvl31(functionTables.dBtoGain(dB));
+		next_level31 = functionTables.toLvl31(functionTables.dBtoGain(dB+offsetDb));
 		next_hit = frame;
 	}
 
@@ -50,10 +52,16 @@ public class SampledDrum implements HitInterface {
 		next_level31 = 0;
 		next_hit = frame;
 	}
+	
+	public void setOffsetDb(float dB) {
+		this.offsetDb = dB;
+	}
 
 	public SampledDrum(String name, AudioFormat format)
 			throws UnsupportedAudioFileException, IOException,
 			URISyntaxException {
+		
+		this.offsetDb = 0.f;
 
 		String new_name = name.substring(2);
 

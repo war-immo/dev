@@ -42,6 +42,10 @@ public class RiffXmlAttributes {
 		this.bpm = 120.f;
 		this.part = 1.f;
 		this.decoratorChain = new ArrayList<HitDecorator>();
+		
+		this.decoratorChain.add(new HumanTimingDecorator(4,8,12));
+		this.decoratorChain.add(new HumanVelocityDecorator(0,2,2));
+		
 		this.sampler = sampler;
 		this.drum = sampler.instruments.get("snare");
 		this.decoratedDrum = this.drum;

@@ -49,6 +49,7 @@ public class SamplerSetup {
 		drums = new SampledDrum[named_resources.length / 2];
 		for (int i = 0; i < drums.length; ++i) {
 			drums[i] = new SampledDrum(named_resources[i * 2 + 1], format);
+			drums[i].setOffsetDb(-10.f);
 		}
 
 		instruments = new HashMap<String, HitInterface>();
@@ -92,6 +93,13 @@ public class SamplerSetup {
 				instruments.get("8-bell")));
 
 		instruments.put("9", instruments.get("9-ord"));
+		
+		/**
+		 * some level adjustments
+		 */
+		
+		((SampledDrum) instruments.get("snare")).setOffsetDb(0.f);
+		
 	}
 
 	public void addToBuffer(long framestart, long[] o_buffer, int samples,

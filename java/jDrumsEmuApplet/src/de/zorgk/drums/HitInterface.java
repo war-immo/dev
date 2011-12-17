@@ -7,6 +7,8 @@ package de.zorgk.drums;
  * 
  */
 public interface HitInterface {
+	
+	static final float sampleRate=44100.f;
 
 	/**
 	 * hit the drum (again) and if necessary stop the current sound, use last or
