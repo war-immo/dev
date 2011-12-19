@@ -7,9 +7,9 @@ import java.util.TreeMap;
 public class HihatMixer implements HitInterface {
 
 	float dB = 1.f;
-	float ordXtop = 0.f;
-	float rimXbel = 1.f;
-	float openXclosed = 0.f;
+	float ordXtop = 0.2f;
+	float rimXbel = 0.8f;
+	float openXclosed = 0.2f;
 
 	HitInterface bel, oord, cord, otop, ctop;
 
@@ -144,11 +144,11 @@ public class HihatMixer implements HitInterface {
 
 	@Override
 	public long getParameterNbrName(String name) {
-		if (name == "openXclosed")
+		if (name.equalsIgnoreCase("openXclosed"))
 			return 0;
-		if (name == "ordXtop")
+		if (name.equalsIgnoreCase("ordXtop"))
 			return 1;
-		if (name == "rimXbel")
+		if (name.equalsIgnoreCase("rimXbel"))
 			return 2;
 
 		throw new IllegalArgumentException("parameter unknown");

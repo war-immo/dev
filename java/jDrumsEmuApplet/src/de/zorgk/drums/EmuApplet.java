@@ -12,10 +12,6 @@ import java.util.*;
 
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.ListSelectionEvent;
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.xml.sax.SAXException;
-
 import java.awt.event.*;
 import java.awt.Font;
 import java.awt.Color;
@@ -167,16 +163,16 @@ public class EmuApplet extends JApplet {
 					case 3:
 						try {
 							trampoline.push(RiffXmlToRiffInterface.transformXml((String)o, sampler));
-						} catch (ParserConfigurationException e) {
+						} catch (Exception e) {
 							// TODO Auto-generated catch block
-							e.printStackTrace();
-						} catch (SAXException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
+							out("\n\n");
+							StackTraceElement[] s = e.getStackTrace();
+							for (int i=0; i < s.length; ++i) {
+								out(s[i].toString());
+								
+							}
+							out("... ERROR: "+e.getMessage());
+						} 
 						break;
 						default:
 							out("\nunknown to_line: " + nbr + ", " + o.toString());	
@@ -303,7 +299,7 @@ public class EmuApplet extends JApplet {
 		toolBar.add(btnAddRiffXml);
 		
 		textRiffXml = new JTextArea();
-		textRiffXml.setText("<riff>\n<chain Repeat=\"10\" bpm=\"160\">\n   <syn>\n   <hs length=\"4\" drum=\"kick\" part=\"0.25\"/>\n   <pattern length=\"4\" part=\"0.5\" drum=\"snare\">+.+..++.</pattern>\n   <hs length=\"4\" drum=\"hh\" part=\"0.5\" />\n   </syn>\n</chain>\n</riff>");
+		textRiffXml.setText("<riff>\n<chain Repeat=\"10\" bpm=\"160\">\n   <syn>\n   <hs length=\"4\" drum=\"kick\" part=\"0.25\"/>\n   <pattern length=\"4\" part=\"0.5\" drum=\"snare\">+-+--++-</pattern>\n   <hs length=\"4\" drum=\"hh\" part=\"0.5\" />\n   </syn>\n</chain>\n</riff>");
 		textRiffXml.setBackground(Color.WHITE);
 		textRiffXml.setFont(new Font("Courier", Font.BOLD, 16));
 		scrollPane_1.setViewportView(textRiffXml);

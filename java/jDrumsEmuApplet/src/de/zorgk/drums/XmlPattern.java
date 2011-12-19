@@ -43,7 +43,7 @@ public class XmlPattern implements RiffXmlInterface {
 	@Override
 	public void characters(String contents) {
 		for (int i=0;i<contents.length();++i) {
-			if (contents.charAt(i) == '.') 
+			if (contents.charAt(i) == '-') 
 				pattern.add(0);
 			if (contents.charAt(i) == '+')
 				pattern.add(1);

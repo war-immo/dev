@@ -6,7 +6,7 @@ import java.util.TreeMap;
 
 public class ChinaMixer implements HitInterface {
 	float dB = 1.f;
-	float ordXtop = 0.f;
+	float ordXtop = 0.2f;
 
 	HitInterface ord, top;
 
@@ -90,9 +90,11 @@ public class ChinaMixer implements HitInterface {
 
 	@Override
 	public long getParameterNbrName(String name) {
-		if (name != "ordXtop")
-			throw new IllegalArgumentException("parameter unknown");
-		return 0;
+		if (name.equalsIgnoreCase("ordXtop"))
+			return 0;
+			
+		
+		throw new IllegalArgumentException("parameter unknown");
 	}
 
 	@Override

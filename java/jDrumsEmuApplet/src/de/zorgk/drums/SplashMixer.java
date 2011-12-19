@@ -6,7 +6,7 @@ import java.util.TreeMap;
 
 public class SplashMixer implements HitInterface {
 	float dB = 1.f;
-	float rimXbel = 1.f;
+	float rimXbel = 0.2f;
 
 	HitInterface bel, ord;
 
@@ -19,8 +19,8 @@ public class SplashMixer implements HitInterface {
 
 	@Override
 	public void hit(long frame) {
-		bel.hit(frame, dB + functionTables.GaintodB((1.f - rimXbel)));
-		ord.hit(frame, dB + functionTables.GaintodB(rimXbel));
+		bel.hit(frame, dB + functionTables.GaintodB(rimXbel));
+		ord.hit(frame, dB + functionTables.GaintodB(1.f - rimXbel));
 
 	}
 
@@ -28,8 +28,8 @@ public class SplashMixer implements HitInterface {
 	public void hit(long frame, float dB) {
 		this.dB = dB;
 
-		bel.hit(frame, dB + functionTables.GaintodB((1.f - rimXbel)));
-		ord.hit(frame, dB + functionTables.GaintodB(rimXbel));
+		bel.hit(frame, dB + functionTables.GaintodB(rimXbel));
+		ord.hit(frame, dB + functionTables.GaintodB(1.f - rimXbel));
 	}
 
 	@Override
@@ -83,9 +83,9 @@ public class SplashMixer implements HitInterface {
 
 	@Override
 	public long getParameterNbrName(String name) {
-		if (name != "rimXbel")
-			throw new IllegalArgumentException("parameter unknown");
-		return 2;
+		if (name.equalsIgnoreCase("rimXbel"))
+			return 2;
+		throw new IllegalArgumentException("parameter unknown");
 	}
 
 	@Override

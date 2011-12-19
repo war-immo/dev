@@ -6,9 +6,9 @@ import java.util.TreeMap;
 
 public class CrashMixer implements HitInterface {
 	float dB = 1.f;
-	float rimXord = 0.f;
-	float rimXbel = 1.f;
-	float ordXtop = 0.f;
+	float rimXord = 0.2f;
+	float rimXbel = 0.8f;
+	float ordXtop = 0.2f;
 
 	HitInterface bel, ord, top, rim;
 
@@ -120,11 +120,11 @@ public class CrashMixer implements HitInterface {
 
 	@Override
 	public long getParameterNbrName(String name) {
-		if (name == "ordXtop")
+		if (name.equalsIgnoreCase("ordXtop"))
 			return 0;
-		if (name == "rimXord")
+		if (name.equalsIgnoreCase("rimXord"))
 			return 1;
-		if (name == "rimXbel")
+		if (name.equalsIgnoreCase("rimXbel"))
 			return 2;
 
 		throw new IllegalArgumentException("parameter unknown");

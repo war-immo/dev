@@ -101,6 +101,37 @@ public class SamplerSetup {
 		((SampledDrum) instruments.get("snare")).setOffsetDb(0.f);
 		
 	}
+	
+	/**
+	 * 
+	 * @return a freshly created ArrayList containing the default decorators
+	 */
+	
+	public ArrayList<HitDecorator> getNewDefaultDecoratorList() {
+		ArrayList<HitDecorator> decoratorChain = new ArrayList<HitDecorator>();
+		
+		decoratorChain.add(new HumanTimingDecorator(4,8,12));
+		decoratorChain.add(new HumanVelocityDecorator(0,2,2));
+		decoratorChain.add(new HumanParameterDecorator(0.16f, "hh", "ordXtop"));
+		decoratorChain.add(new HumanParameterDecorator(0.2f, "hh", "openXclosed"));
+		decoratorChain.add(new HumanParameterDecorator(0.1f, "hh", "rimXbel"));
+		decoratorChain.add(new HumanParameterDecorator(0.2f, "ride", "nrmXelv"));
+		decoratorChain.add(new HumanParameterDecorator(0.2f, "ride", "rimXord"));
+		decoratorChain.add(new HumanParameterDecorator(0.1f, "ride", "rimXbel"));
+		decoratorChain.add(new HumanParameterDecorator(0.2f, "15", "ordXtop"));
+		decoratorChain.add(new HumanParameterDecorator(0.2f, "15", "rimXord"));
+		decoratorChain.add(new HumanParameterDecorator(0.2f, "15", "rimXbel"));
+		decoratorChain.add(new HumanParameterDecorator(0.2f, "18", "ordXtop"));
+		decoratorChain.add(new HumanParameterDecorator(0.2f, "18", "rimXord"));
+		decoratorChain.add(new HumanParameterDecorator(0.2f, "18", "rimXbel"));
+		decoratorChain.add(new HumanParameterDecorator(0.2f, "12", "ordXtop"));
+		decoratorChain.add(new HumanParameterDecorator(0.2f, "12", "rimXord"));
+		decoratorChain.add(new HumanParameterDecorator(0.2f, "12", "rimXbel"));
+		decoratorChain.add(new HumanParameterDecorator(0.2f, "19", "ordXtop"));
+		decoratorChain.add(new HumanParameterDecorator(0.2f, "8", "rimXbel"));
+		
+		return decoratorChain;
+	}
 
 	public void addToBuffer(long framestart, long[] o_buffer, int samples,
 			int offset) {
