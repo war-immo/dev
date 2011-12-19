@@ -21,28 +21,30 @@ public class HumanParameterDecorator implements HitDecorator {
 
 		private HitInterface drum;
 		private float sigma;
-		private float parameterValue;
 		private long parameterNumber;
 
-		public DecoratedInterface(HitInterface drum, float sigma, long nbr, float value) {
+		public DecoratedInterface(HitInterface drum, float sigma, long nbr) {
 			this.drum = drum;
 			this.sigma = sigma;
 			this.parameterNumber = nbr;
-			this.parameterValue = value;
 		}
 
 		@Override
 		public void hit(long frame, float dB) {
-			float humanPart =  ((float)randomNumber.nextGaussian())*sigma;
-			if (humanPart < -2.f*sigma) {
-				humanPart = -2.f*sigma;
-			} else if (humanPart > 2.f*sigma) {
-				humanPart = 2.f*sigma;
+			float human_part =  ((float)randomNumber.nextGaussian())*sigma;
+			if (human_part < -2.f*sigma) {
+				human_part = -2.f*sigma;
+			} else if (human_part > 2.f*sigma) {
+				human_part = 2.f*sigma;
 			}
 			
-			drum.setFloat(this.parameterNumber, this.parameterValue+humanPart);
+			float parameter_value=drum.getFloat(this.parameterNumber);
+			
+			drum.setFloat(this.parameterNumber, parameter_value+human_part);
 			
 			drum.hit(frame,dB);
+			
+			drum.setFloat(this.parameterNumber, parameter_value);
 		}
 
 		@Override
@@ -53,17 +55,12 @@ public class HumanParameterDecorator implements HitDecorator {
 
 		@Override
 		public void setFloat(long nbr, float value) {
-			if (nbr == this.parameterNumber) {
-				this.parameterValue = value;
-			} else
-				drum.setFloat(nbr, value);
+			drum.setFloat(nbr, value);
 		}
 
 		@Override
 		public float getFloat(long nbr) {
-			if (nbr == this.parameterNumber) {
-				return this.parameterValue;
-			}
+			
 			return drum.getFloat(nbr);
 		}
 
@@ -89,14 +86,14 @@ public class HumanParameterDecorator implements HitDecorator {
 
 		@Override
 		public Object exportAllParameters() {
-			drum.setFloat(this.parameterNumber, this.parameterValue);
+			
 			return drum.exportAllParameters();
 		}
 
 		@Override
 		public void restoreParameters(Object previousState) {
 			drum.restoreParameters(previousState);
-			this.parameterValue = drum.getFloat(this.parameterNumber);
+			
 		}
 
 	};
@@ -119,7 +116,7 @@ public class HumanParameterDecorator implements HitDecorator {
 				 */
 				return drum;
 			}
-			return new DecoratedInterface(drum, this.sigma, parameterNbr,drum.getFloat(parameterNbr));
+			return new DecoratedInterface(drum, this.sigma, parameterNbr);
 		}
 		return drum;
 	}
