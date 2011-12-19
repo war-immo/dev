@@ -22,27 +22,6 @@ public class HihatMixer implements HitInterface {
 		this.otop = otop;
 	}
 
-	@Override
-	public void hit(long frame) {
-		bel.hit(frame, dB + functionTables.GaintodB((1.f - rimXbel)));
-		cord.hit(
-				frame,
-				dB
-						+ functionTables.GaintodB(rimXbel * ordXtop
-								* (1.f - openXclosed)));
-		oord.hit(frame,
-				dB + functionTables.GaintodB(rimXbel * ordXtop * openXclosed));
-		ctop.hit(
-				frame,
-				dB
-						+ functionTables.GaintodB(rimXbel * (1.f - ordXtop)
-								* (1.f - openXclosed)));
-		otop.hit(
-				frame,
-				dB
-						+ functionTables.GaintodB(rimXbel * (1.f - ordXtop)
-								* openXclosed));
-	}
 
 	@Override
 	public void hit(long frame, float dB) {

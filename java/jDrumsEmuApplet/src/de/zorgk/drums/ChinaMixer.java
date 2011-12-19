@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 public class ChinaMixer implements HitInterface {
-	float dB = 1.f;
+
 	float ordXtop = 0.2f;
 
 	HitInterface ord, top;
@@ -17,17 +17,10 @@ public class ChinaMixer implements HitInterface {
 
 	}
 
-	@Override
-	public void hit(long frame) {
-
-		ord.hit(frame, dB + functionTables.GaintodB(1.f - ordXtop));
-		top.hit(frame, dB + functionTables.GaintodB(ordXtop));
-
-	}
 
 	@Override
 	public void hit(long frame, float dB) {
-		this.dB = dB;
+
 
 		ord.hit(frame, dB + functionTables.GaintodB(1.f - ordXtop));
 		top.hit(frame, dB + functionTables.GaintodB(ordXtop));

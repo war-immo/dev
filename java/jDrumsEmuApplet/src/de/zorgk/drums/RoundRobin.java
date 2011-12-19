@@ -5,7 +5,7 @@ import java.util.*;
 public class RoundRobin implements HitInterface {
 
 	int current_nbr = 0;
-	float dB = 0.f;
+
 	ArrayList<HitInterface> round;
 
 	public RoundRobin(HitInterface first) {
@@ -17,14 +17,11 @@ public class RoundRobin implements HitInterface {
 		round.add(h);
 	}
 
-	@Override
-	public void hit(long frame) {
-		this.hit(frame, dB);
-	}
+
 
 	@Override
 	public void hit(long frame, float dB) {
-		this.dB = dB;
+
 		current_nbr += 1;
 		if (current_nbr >= round.size())
 			current_nbr = 0;

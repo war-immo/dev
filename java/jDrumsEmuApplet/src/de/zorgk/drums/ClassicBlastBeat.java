@@ -35,8 +35,8 @@ public class ClassicBlastBeat implements RiffInterface, Cloneable {
 			started = true;
 
 			startFrame = framestart;
-			this.kick.hit(framestart);
-			this.snare.hit(framestart);
+			this.kick.hit(framestart,0);
+			this.snare.hit(framestart,0);
 			this.nextKick = 1;
 
 			return false;
@@ -48,11 +48,11 @@ public class ClassicBlastBeat implements RiffInterface, Cloneable {
 			if (nextKick >= count * 2)
 				return true;
 
-			this.kick.hit(next_kick_frame);
+			this.kick.hit(next_kick_frame,0);
 			if (1 == (nextKick & 0x1)) {
-				this.hihat.hit(next_kick_frame);
+				this.hihat.hit(next_kick_frame,0);
 			} else {
-				this.snare.hit(next_kick_frame);
+				this.snare.hit(next_kick_frame,0);
 			}
 			this.nextKick++;
 		}

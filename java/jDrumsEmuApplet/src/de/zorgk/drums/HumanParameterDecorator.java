@@ -32,20 +32,6 @@ public class HumanParameterDecorator implements HitDecorator {
 		}
 
 		@Override
-		public void hit(long frame) {
-			float humanPart =  ((float)randomNumber.nextGaussian())*sigma;
-			if (humanPart < -2.f*sigma) {
-				humanPart = -2.f*sigma;
-			} else if (humanPart > 2.f*sigma) {
-				humanPart = 2.f*sigma;
-			}
-			
-			drum.setFloat(this.parameterNumber, this.parameterValue+humanPart);
-		
-			drum.hit(frame);
-		}
-
-		@Override
 		public void hit(long frame, float dB) {
 			float humanPart =  ((float)randomNumber.nextGaussian())*sigma;
 			if (humanPart < -2.f*sigma) {

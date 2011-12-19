@@ -82,11 +82,8 @@ public class EmuApplet extends JApplet {
 				out("UnsuppoertedAudioFileException " + e.toString());
 
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				out("IOException " + e.toString());
 			} catch (URISyntaxException e) {
-				// TODO Auto-generated catch block
-
 				out("URISyntaxException " + e.toString());
 			}
 
@@ -164,7 +161,6 @@ public class EmuApplet extends JApplet {
 						try {
 							trampoline.push(RiffXmlToRiffInterface.transformXml((String)o, sampler));
 						} catch (Exception e) {
-							// TODO Auto-generated catch block
 							out("\n\n");
 							StackTraceElement[] s = e.getStackTrace();
 							for (int i=0; i < s.length; ++i) {

@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 public class SplashMixer implements HitInterface {
-	float dB = 1.f;
+
 	float rimXbel = 0.2f;
 
 	HitInterface bel, ord;
@@ -17,16 +17,11 @@ public class SplashMixer implements HitInterface {
 
 	}
 
-	@Override
-	public void hit(long frame) {
-		bel.hit(frame, dB + functionTables.GaintodB(rimXbel));
-		ord.hit(frame, dB + functionTables.GaintodB(1.f - rimXbel));
 
-	}
 
 	@Override
 	public void hit(long frame, float dB) {
-		this.dB = dB;
+
 
 		bel.hit(frame, dB + functionTables.GaintodB(rimXbel));
 		ord.hit(frame, dB + functionTables.GaintodB(1.f - rimXbel));

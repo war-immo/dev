@@ -10,20 +10,13 @@ public interface HitInterface {
 	
 	static final float sampleRate=44100.f;
 
-	/**
-	 * hit the drum (again) and if necessary stop the current sound, use last or
-	 * default dB value
-	 * 
-	 * @param frame
-	 *            hit at this frame
-	 */
-	public void hit(long frame);
 
 	/**
-	 * hit at frame, use new dB value
+	 *  hit the drum (again) and if necessary stop the current sound, use last or,
+	 *  use given dB value
 	 * 
 	 * @param frame
-	 * @param dB
+	 * @param dB (where 0.f can be considered the normal value for the drum)
 	 */
 	public void hit(long frame, float dB);
 

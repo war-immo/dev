@@ -76,9 +76,9 @@ public class HumanizedStraightBlastBeat implements RiffInterface, Cloneable {
 
 			startFrame = framestart;
 			this.kick
-					.hit(framestart + randomGenerator.nextInt(uniformAccuracy));
+					.hit(framestart + randomGenerator.nextInt(uniformAccuracy),0);
 			this.snare.hit(framestart
-					+ randomGenerator.nextInt(uniformAccuracy));
+					+ randomGenerator.nextInt(uniformAccuracy),0);
 			this.hihat.setFloat(openXclosed, openClosed
 					+ (float) randomGenerator.nextGaussian()
 					* (0.5f * openClosed2Sigma));
@@ -86,7 +86,7 @@ public class HumanizedStraightBlastBeat implements RiffInterface, Cloneable {
 					ordTop + (float) randomGenerator.nextGaussian()
 							* (0.5f * ordTop2Sigma));
 			this.hihat.hit(framestart
-					+ randomGenerator.nextInt(uniformAccuracy));
+					+ randomGenerator.nextInt(uniformAccuracy),0);
 			this.nextKick = 1;
 
 			return false;
@@ -99,7 +99,7 @@ public class HumanizedStraightBlastBeat implements RiffInterface, Cloneable {
 				return true;
 
 			this.kick.hit(next_kick_frame
-					+ randomGenerator.nextInt(uniformAccuracy));
+					+ randomGenerator.nextInt(uniformAccuracy),0);
 			if (1 == (nextKick & 0x1)) {
 
 			} else {
@@ -110,10 +110,10 @@ public class HumanizedStraightBlastBeat implements RiffInterface, Cloneable {
 						ordTop + (float) randomGenerator.nextGaussian()
 								* (0.5f * ordTop2Sigma));
 				this.hihat.hit(next_kick_frame
-						+ randomGenerator.nextInt(uniformAccuracy));
+						+ randomGenerator.nextInt(uniformAccuracy),0);
 
 				this.snare.hit(next_kick_frame
-						+ randomGenerator.nextInt(uniformAccuracy));
+						+ randomGenerator.nextInt(uniformAccuracy),0);
 			}
 			this.nextKick++;
 		}

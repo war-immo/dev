@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 public class CrashMixer implements HitInterface {
-	float dB = 1.f;
+
 	float rimXord = 0.2f;
 	float rimXbel = 0.8f;
 	float ordXtop = 0.2f;
@@ -20,21 +20,11 @@ public class CrashMixer implements HitInterface {
 		this.rim = rim;
 	}
 
-	@Override
-	public void hit(long frame) {
-		bel.hit(frame, dB + functionTables.GaintodB((1.f - rimXbel)));
-		ord.hit(frame,
-				dB
-						+ functionTables.GaintodB(rimXbel * rimXord
-								* (1.f - ordXtop)));
-		top.hit(frame,
-				dB + functionTables.GaintodB(rimXbel * rimXord * ordXtop));
-		rim.hit(frame, dB + functionTables.GaintodB(rimXbel * (1.f - rimXord)));
-	}
+
 
 	@Override
 	public void hit(long frame, float dB) {
-		this.dB = dB;
+
 
 		bel.hit(frame, dB + functionTables.GaintodB((1.f - rimXbel)));
 		ord.hit(frame,

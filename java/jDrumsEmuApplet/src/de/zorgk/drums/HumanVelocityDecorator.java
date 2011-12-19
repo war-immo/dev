@@ -19,25 +19,14 @@ public class HumanVelocityDecorator implements HitDecorator {
 
 		private HitInterface drum;
 		private double sigma;
-		private float dB;
+
 
 		public DecoratedInterface(HitInterface drum, double sigma) {
 			this.drum = drum;
 			this.sigma = sigma;
 		}
 
-		@Override
-		public void hit(long frame) {
-			double offset = randomNumber.nextGaussian() * sigma;
-			if (offset < -2.*sigma) {
-				offset = -2.*sigma;
-			}
-			if (offset > 2. * sigma) {
-				offset = 2. * sigma;
-			}
-			
-			drum.hit(frame,(float) (dB+offset));
-		}
+
 
 		@Override
 		public void hit(long frame, float dB) {
@@ -48,8 +37,7 @@ public class HumanVelocityDecorator implements HitDecorator {
 			if (offset > 2. * sigma) {
 				offset = 2. * sigma;
 			}
-			
-			this.dB = dB;
+
 			
 			
 			drum.hit(frame,(float) (dB+offset));

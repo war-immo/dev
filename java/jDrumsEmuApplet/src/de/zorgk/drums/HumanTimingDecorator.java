@@ -25,20 +25,7 @@ public class HumanTimingDecorator implements HitDecorator {
 			this.sigma = sigma;
 		}
 
-		@Override
-		public void hit(long frame) {
-			double offset = randomNumber.nextGaussian() * sigma;
-			if (offset < 0.) {
-				offset = -offset;
-			}
-			if (offset > 2. * sigma) {
-				offset = 2. * sigma;
-			}
 
-			long new_frame = frame + (long) offset;
-
-			drum.hit(new_frame);
-		}
 
 		@Override
 		public void hit(long frame, float dB) {
