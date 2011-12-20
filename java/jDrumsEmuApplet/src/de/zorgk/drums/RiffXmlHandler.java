@@ -78,6 +78,11 @@ public class RiffXmlHandler extends DefaultHandler {
 				|| qName.equalsIgnoreCase("p") || qName.equalsIgnoreCase("pat")) {
 			riffStack.push(new XmlPattern(riffStack.peek(), attributeStack
 					.peek()));
+		} else if (qName.equalsIgnoreCase("control")
+				|| qName.equalsIgnoreCase("cnt")
+				|| qName.equalsIgnoreCase("ctr")) {
+			riffStack.push(new XmlControl(riffStack.peek(), attributeStack
+					.peek()));
 		} else { // unknown or decorating tag, use XmlDistribute
 			riffStack.push(new XmlDistribute(riffStack.peek()));
 		}

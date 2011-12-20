@@ -295,7 +295,7 @@ public class EmuApplet extends JApplet {
 		toolBar.add(btnAddRiffXml);
 		
 		textRiffXml = new JTextArea();
-		textRiffXml.setText("<riff>\n<chain Repeat=\"10\" bpm=\"160\">\n   <syn>\n   <hs length=\"4\" drum=\"kick\" part=\"0.25\"/>\n   <pattern length=\"4\" part=\"0.5\" drum=\"snare\">+-+--++-</pattern>\n   <hs length=\"4\" drum=\"hh\" part=\"0.5\" />\n   </syn>\n</chain>\n</riff>");
+		textRiffXml.setText("<riff>\n<chain Repeat=\"2\" bpm=\"160\">\n   <syn>\n   <hs length=\"4\" drum=\"kick\" part=\"0.25\"/>\n   <pattern length=\"4\" part=\"0.5\" drum=\"snare\">+-+--++-</pattern>\n   <hs length=\"4\" drum=\"hh\" part=\"0.5\">\n   <control>openXclosed=0.1</control>\n   </hs>\n   </syn>\n\n   <syn>\n   <hs length=\"4\" drum=\"kick\" part=\"0.25\"/>\n   <pattern length=\"4\" part=\"0.5\" drum=\"snare\">+-+--++-</pattern>\n   <hs length=\"4\" drum=\"hh\" part=\"0.5\">\n   <control>openXclosed=0.8</control>\n   </hs>\n   </syn>\n</chain>\n</riff>");
 		textRiffXml.setBackground(Color.WHITE);
 		textRiffXml.setFont(new Font("Courier", Font.BOLD, 16));
 		scrollPane_1.setViewportView(textRiffXml);
