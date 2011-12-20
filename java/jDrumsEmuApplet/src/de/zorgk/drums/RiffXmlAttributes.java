@@ -37,7 +37,7 @@ public class RiffXmlAttributes {
 	 */
 	public RiffXmlAttributes(SamplerSetup sampler) {
 		this.attributes = new HashMap<String, String>();
-		this.speedFactor = 1.f;
+		this.speedFactor = sampler.speedFactor;
 		this.length = 1.f;
 		this.bpm = 120.f;
 		this.part = 1.f;

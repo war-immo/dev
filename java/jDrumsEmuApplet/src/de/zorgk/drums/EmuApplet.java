@@ -2,11 +2,17 @@ package de.zorgk.drums;
 
 import javax.sound.sampled.*;
 import javax.swing.*;
+
 import java.awt.BorderLayout;
 import javax.swing.border.EtchedBorder;
 import java.awt.Panel;
 import java.awt.FlowLayout;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.util.*;
 
@@ -15,6 +21,8 @@ import javax.swing.event.ListSelectionEvent;
 import java.awt.event.*;
 import java.awt.Font;
 import java.awt.Color;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.ChangeEvent;
 
 public class EmuApplet extends JApplet {
 
@@ -74,7 +82,7 @@ public class EmuApplet extends JApplet {
 			long[] i_buffer = new long[channels * buffer_frames];
 
 			long frames_elapsed = 0;
-
+			
 			SamplerSetup sampler = null;
 			try {
 				sampler = new SamplerSetup(format);
@@ -145,7 +153,7 @@ public class EmuApplet extends JApplet {
 					int nbr = to_line.info();
 					Object o = to_line.object();
 					to_line.pop();
-					switch(nbr) {
+					switch (nbr) {
 					case 0:
 						trampoline = new LinkedList<RiffInterface>();
 						trampoline.push(new EmptyRiff());
@@ -154,26 +162,29 @@ public class EmuApplet extends JApplet {
 						trampoline.push(new EmptyRiff());
 						break;
 					case 2:
-						if (trampoline.size()>1)
+						if (trampoline.size() > 1)
 							trampoline.pop();
 						break;
 					case 3:
 						try {
-							trampoline.push(RiffXmlToRiffInterface.transformXml((String)o, sampler));
+							trampoline.push(RiffXmlToRiffInterface
+									.transformXml((String) o, sampler));
 						} catch (Exception e) {
 							out("\n\n");
 							StackTraceElement[] s = e.getStackTrace();
-							for (int i=0; i < s.length; ++i) {
+							for (int i = 0; i < s.length; ++i) {
 								out(s[i].toString());
-								
+
 							}
-							out("... ERROR: "+e.getMessage());
-						} 
+							out("... ERROR: " + e.getMessage());
+						}
 						break;
-						default:
-							out("\nunknown to_line: " + nbr + ", " + o.toString());	
+					case 4:
+						sampler.speedFactor = (Float)o *0.01f;
+						break;
+					default:
+						out("\nunknown to_line: " + nbr + ", " + o.toString());
 					}
-					
 
 				}
 
@@ -210,6 +221,8 @@ public class EmuApplet extends JApplet {
 	 */
 	public EmuApplet() {
 
+		final EmuApplet parent = this;
+
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.BOTTOM);
 		tabbedPane
 				.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
@@ -220,19 +233,14 @@ public class EmuApplet extends JApplet {
 		flowLayout.setAlignment(FlowLayout.LEADING);
 		tabbedPane.addTab("Line", null, panel, null);
 
-		JList list = new JList(lines);
-		list.addListSelectionListener(new ListSelectionListener() {
-			public void valueChanged(ListSelectionEvent arg0) {
-				initLine(arg0.getFirstIndex());
-			}
-		});
-
-		panel.add(list);
-
 		JPanel panel_1 = new JPanel();
+		FlowLayout flowLayout_1 = (FlowLayout) panel_1.getLayout();
+		flowLayout_1.setAlignment(FlowLayout.TRAILING);
 		panel.add(panel_1);
 
 		JLabel lblNewLabel = new JLabel("Requested buffer size: ");
+		lblNewLabel.setVerticalAlignment(SwingConstants.BOTTOM);
+		lblNewLabel.setHorizontalAlignment(SwingConstants.TRAILING);
 		panel_1.add(lblNewLabel);
 
 		textField = new JTextField();
@@ -243,6 +251,16 @@ public class EmuApplet extends JApplet {
 
 		JButton btnNewButton = new JButton("Restart line!");
 		panel_1.add(btnNewButton);
+
+		JList list = new JList(lines);
+		list.setLayoutOrientation(JList.HORIZONTAL_WRAP);
+		list.addListSelectionListener(new ListSelectionListener() {
+			public void valueChanged(ListSelectionEvent arg0) {
+				initLine(arg0.getFirstIndex());
+			}
+		});
+
+		panel.add(list);
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				int current = currentLine;
@@ -258,10 +276,10 @@ public class EmuApplet extends JApplet {
 
 		JScrollPane scrollPane_1 = new JScrollPane();
 		tabbedPane.addTab("Control", null, scrollPane_1, null);
-		
+
 		JToolBar toolBar = new JToolBar();
 		scrollPane_1.setColumnHeaderView(toolBar);
-		
+
 		JButton btnStop = new JButton("Stop");
 		btnStop.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -269,7 +287,7 @@ public class EmuApplet extends JApplet {
 			}
 		});
 		toolBar.add(btnStop);
-		
+
 		JButton btnPause = new JButton("Pause");
 		btnPause.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -277,7 +295,7 @@ public class EmuApplet extends JApplet {
 			}
 		});
 		toolBar.add(btnPause);
-		
+
 		JButton btnNext = new JButton("Next");
 		btnNext.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -285,7 +303,7 @@ public class EmuApplet extends JApplet {
 			}
 		});
 		toolBar.add(btnNext);
-		
+
 		JButton btnAddRiffXml = new JButton("Add Riff XML (below)");
 		btnAddRiffXml.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -293,13 +311,81 @@ public class EmuApplet extends JApplet {
 			}
 		});
 		toolBar.add(btnAddRiffXml);
+
+		JButton btnSave = new JButton("Save");
+		btnSave.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				JFileChooser fc = new JFileChooser();
+
+				if (fc.showSaveDialog(parent) == JFileChooser.APPROVE_OPTION) {
+					try {
+						FileWriter writer = new FileWriter(fc.getSelectedFile());
+
+						writer.write(textRiffXml.getText());
+						writer.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		});
 		
+				JSlider slider = new JSlider();
+				slider.addChangeListener(new ChangeListener() {
+					
+					public void stateChanged(ChangeEvent arg0) {
+						
+						to_line.push(4, new Float(((JSlider)arg0.getSource()).getValue()));
+					}
+				});
+				slider.setMinorTickSpacing(5);
+				slider.setMajorTickSpacing(25);
+				slider.setPaintTicks(true);
+				slider.setToolTipText("speed factor");
+				slider.setValue(100);
+				slider.setMaximum(200);
+				toolBar.add(slider);
+		toolBar.add(btnSave);
+
+		JButton btnLoad = new JButton("Load");
+		btnLoad.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JFileChooser fc = new JFileChooser();
+
+				if (fc.showOpenDialog(parent) == JFileChooser.APPROVE_OPTION) {
+
+					byte[] buffer = new byte[(int) fc.getSelectedFile()
+							.length()];
+					
+					
+					InputStream s;
+					try {
+						s = new FileInputStream(fc.getSelectedFile());
+						s.read(buffer);
+						textRiffXml.setText(new String(buffer));
+						s.close();
+					} catch (FileNotFoundException e1) {
+
+						e1.printStackTrace();
+					} catch (IOException e2) {
+
+						e2.printStackTrace();
+					}
+					
+
+				}
+
+			}
+		});
+		toolBar.add(btnLoad);
+
 		textRiffXml = new JTextArea();
-		textRiffXml.setText("<riff>\n<chain Repeat=\"2\" bpm=\"160\">\n   <syn>\n   <hs length=\"4\" drum=\"kick\" part=\"0.25\"/>\n   <pattern length=\"4\" part=\"0.5\" drum=\"snare\">+-+--++-</pattern>\n   <hs length=\"4\" drum=\"hh\" part=\"0.5\">\n   <control>openXclosed=0.1</control>\n   </hs>\n   </syn>\n\n   <syn>\n   <hs length=\"4\" drum=\"kick\" part=\"0.25\"/>\n   <pattern length=\"4\" part=\"0.5\" drum=\"snare\">+-+--++-</pattern>\n   <hs length=\"4\" drum=\"hh\" part=\"0.5\">\n   <control>openXclosed=0.8</control>\n   </hs>\n   </syn>\n</chain>\n</riff>");
+		textRiffXml
+				.setText("<riff>\n<chain Repeat=\"2\" bpm=\"160\">\n   <syn>\n   <hs length=\"4\" drum=\"kick\" part=\"0.25\"/>\n   <pattern length=\"4\" part=\"0.5\" drum=\"snare\">+-+--++-</pattern>\n   <hs length=\"4\" drum=\"hh\" part=\"0.5\">\n   <control>openXclosed=0.1</control>\n   </hs>\n   </syn>\n\n   <syn>\n   <hs length=\"4\" drum=\"kick\" part=\"0.25\"/>\n   <pattern length=\"4\" part=\"0.5\" drum=\"snare\">+-+--++-</pattern>\n   <hs length=\"4\" drum=\"hh\" part=\"0.5\">\n   <control>openXclosed=0.8</control>\n   </hs>\n   </syn>\n</chain>\n</riff>");
 		textRiffXml.setBackground(Color.WHITE);
 		textRiffXml.setFont(new Font("Courier", Font.BOLD, 16));
 		scrollPane_1.setViewportView(textRiffXml);
-		
+
 		out("Build: " + build_nbr);
 		out("Desired format: " + format.toString());
 
@@ -355,24 +441,24 @@ public class EmuApplet extends JApplet {
 		textArea.append(data + "\n");
 		textArea.setCaretPosition(textArea.getDocument().getLength());
 	}
-	
+
 	/**
 	 * 
 	 * create a JFrame and then run the applet
 	 * 
 	 * @param args
 	 */
-	
+
 	public static void main(String[] args) {
-		
+
 		EmuApplet applet = new EmuApplet();
-		
+
 		JFrame frame = new JFrame("de.zorgk.drums.EmuApplet");
-	    frame.getContentPane().add(applet);
-	 
-	    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	    frame.pack();
-	    frame.setVisible(true);
-		
+		frame.getContentPane().add(applet);
+
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.pack();
+		frame.setVisible(true);
+
 	}
 }

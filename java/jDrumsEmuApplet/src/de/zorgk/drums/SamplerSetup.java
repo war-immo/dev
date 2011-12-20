@@ -15,6 +15,13 @@ import javax.sound.sampled.UnsupportedAudioFileException;
  * 
  */
 public class SamplerSetup {
+	
+	/**
+	 * stores the samplers speed factor
+	 */
+	
+	public float speedFactor=1.f;
+	
 
 	public static final String[] named_resources = { "kick1",
 			"../res/kick-a.wav", "kick2", "../res/kick-b.wav", "snare",
