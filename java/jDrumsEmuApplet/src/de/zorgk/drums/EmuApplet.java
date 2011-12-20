@@ -355,4 +355,24 @@ public class EmuApplet extends JApplet {
 		textArea.append(data + "\n");
 		textArea.setCaretPosition(textArea.getDocument().getLength());
 	}
+	
+	/**
+	 * 
+	 * create a JFrame and then run the applet
+	 * 
+	 * @param args
+	 */
+	
+	public static void main(String[] args) {
+		
+		EmuApplet applet = new EmuApplet();
+		
+		JFrame frame = new JFrame("de.zorgk.drums.EmuApplet");
+	    frame.getContentPane().add(applet);
+	 
+	    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	    frame.pack();
+	    frame.setVisible(true);
+		
+	}
 }
