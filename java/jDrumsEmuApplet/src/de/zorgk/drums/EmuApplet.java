@@ -9,7 +9,6 @@ import java.awt.Panel;
 import java.awt.FlowLayout;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -381,7 +380,7 @@ public class EmuApplet extends JApplet {
 
 		textRiffXml = new JTextArea();
 		textRiffXml
-				.setText("<riff>\n<chain Repeat=\"2\" bpm=\"160\">\n   <syn>\n   <hs length=\"4\" drum=\"kick\" part=\"0.25\"/>\n   <pattern length=\"4\" part=\"0.5\" drum=\"snare\">+-+--++-</pattern>\n   <hs length=\"4\" drum=\"hh\" part=\"0.5\">\n   <control>openXclosed=0.1</control>\n   </hs>\n   </syn>\n\n   <syn>\n   <hs length=\"4\" drum=\"kick\" part=\"0.25\"/>\n   <pattern length=\"4\" part=\"0.5\" drum=\"snare\">+-+--++-</pattern>\n   <hs length=\"4\" drum=\"hh\" part=\"0.5\">\n   <control>openXclosed=0.8</control>\n   </hs>\n   </syn>\n</chain>\n</riff>");
+				.setText("<?xml version=\"1.0\"?>\n<!DOCTYPE riff SYSTEM \"https://raw.github.com/war-immo/dev/master/dtd/riffxml.1.0.0.dtd\">\n<riff>\n\t<chain Repeat=\"2\" bpm=\"160\">\n\t\t<syn>\n\t\t\t<hs length=\"4\" drum=\"kick\" part=\"0.25\"/>\n\t\t\t<pattern length=\"4\" part=\"0.5\" drum=\"snare\">+-+--++-</pattern>\n\t\t\t<hs length=\"4\" drum=\"hh\" part=\"0.5\">\n\t\t\t\t<control>openXclosed=0.1</control>\n\t\t\t</hs>\n\t\t</syn>\n\t\t<syn>\n\t\t\t<hs length=\"4\" drum=\"kick\" part=\"0.25\"/>\n\t\t\t<pattern length=\"4\" part=\"0.5\" drum=\"snare\">+-+--++-</pattern>\n\t\t\t<hs length=\"4\" drum=\"hh\" part=\"0.5\">\n\t\t\t\t<control>openXclosed=0.8</control>\n\t\t\t</hs>\n\t\t</syn>\n\t</chain>\n</riff>\n");
 		textRiffXml.setBackground(Color.WHITE);
 		textRiffXml.setFont(new Font("Courier", Font.BOLD, 16));
 		scrollPane_1.setViewportView(textRiffXml);
