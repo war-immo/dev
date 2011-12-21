@@ -1,0 +1,283 @@
+<!ELEMENT riff ANY>
+<!ELEMENT chain ANY>
+<!ELEMENT meta ANY>
+<!ELEMENT c ANY>
+<!ATTLIST chain
+	Repeat	CDATA #IMPLIED
+	length	CDATA #IMPLIED
+	length_	CDATA #IMPLIED
+	bpm	CDATA #IMPLIED
+	bpm_	CDATA #IMPLIED
+	part	CDATA #IMPLIED
+	part_	CDATA #IMPLIED
+	db	CDATA #IMPLIED
+	db_	CDATA #IMPLIED
+	drum	CDATA #IMPLIED
+>
+<!ATTLIST meta
+	Repeat	CDATA #IMPLIED
+	length	CDATA #IMPLIED
+	length_	CDATA #IMPLIED
+	bpm	CDATA #IMPLIED
+	bpm_	CDATA #IMPLIED
+	part	CDATA #IMPLIED
+	part_	CDATA #IMPLIED
+	db	CDATA #IMPLIED
+	db_	CDATA #IMPLIED
+	drum	CDATA #IMPLIED
+>
+<!ATTLIST c
+	Repeat	CDATA #IMPLIED
+	length	CDATA #IMPLIED
+	length_	CDATA #IMPLIED
+	bpm	CDATA #IMPLIED
+	bpm_	CDATA #IMPLIED
+	part	CDATA #IMPLIED
+	part_	CDATA #IMPLIED
+	db	CDATA #IMPLIED
+	db_	CDATA #IMPLIED
+	drum	CDATA #IMPLIED
+>
+<!ELEMENT syn ANY>
+<!ELEMENT antichain ANY>
+<!ELEMENT a ANY>
+<!ATTLIST syn
+	length	CDATA #IMPLIED
+	length_	CDATA #IMPLIED
+	bpm	CDATA #IMPLIED
+	bpm_	CDATA #IMPLIED
+	part	CDATA #IMPLIED
+	part_	CDATA #IMPLIED
+	db	CDATA #IMPLIED
+	db_	CDATA #IMPLIED
+	drum	CDATA #IMPLIED
+>
+<!ATTLIST antichain
+	length	CDATA #IMPLIED
+	length_	CDATA #IMPLIED
+	bpm	CDATA #IMPLIED
+	bpm_	CDATA #IMPLIED
+	part	CDATA #IMPLIED
+	part_	CDATA #IMPLIED
+	db	CDATA #IMPLIED
+	db_	CDATA #IMPLIED
+	drum	CDATA #IMPLIED
+>
+<!ATTLIST a
+	length	CDATA #IMPLIED
+	length_	CDATA #IMPLIED
+	bpm	CDATA #IMPLIED
+	bpm_	CDATA #IMPLIED
+	part	CDATA #IMPLIED
+	part_	CDATA #IMPLIED
+	db	CDATA #IMPLIED
+	db_	CDATA #IMPLIED
+	drum	CDATA #IMPLIED
+>
+<!ELEMENT control (#PCDATA)*>
+<!ELEMENT cnt (#PCDATA)*>
+<!ELEMENT ctr (#PCDATA)*>
+
+
+<!ATTLIST control
+	length	CDATA #IMPLIED
+	length_	CDATA #IMPLIED
+	bpm	CDATA #IMPLIED
+	bpm_	CDATA #IMPLIED
+	part	CDATA #IMPLIED
+	part_	CDATA #IMPLIED
+	db	CDATA #IMPLIED
+	db_	CDATA #IMPLIED
+	drum	CDATA #IMPLIED
+>
+
+<!ATTLIST cnt
+	length	CDATA #IMPLIED
+	length_	CDATA #IMPLIED
+	bpm	CDATA #IMPLIED
+	bpm_	CDATA #IMPLIED
+	part	CDATA #IMPLIED
+	part_	CDATA #IMPLIED
+	db	CDATA #IMPLIED
+	db_	CDATA #IMPLIED
+	drum	CDATA #IMPLIED
+>
+<!ATTLIST ctr
+	length	CDATA #IMPLIED
+	length_	CDATA #IMPLIED
+	bpm	CDATA #IMPLIED
+	bpm_	CDATA #IMPLIED
+	part	CDATA #IMPLIED
+	part_	CDATA #IMPLIED
+	db	CDATA #IMPLIED
+	db_	CDATA #IMPLIED
+	drum	CDATA #IMPLIED
+>
+<!ELEMENT rest (#PCDATA|control|cnt|ctr)*>
+<!ELEMENT pause (#PCDATA|control|cnt|ctr)*>
+<!ELEMENT r (#PCDATA|control|cnt|ctr)*>
+<!ELEMENT hit (#PCDATA|control|cnt|ctr)*>
+<!ELEMENT kick (#PCDATA|control|cnt|ctr)*>
+<!ELEMENT stroke (#PCDATA|control|cnt|ctr)*>
+<!ELEMENT h (#PCDATA|control|cnt|ctr)*>
+<!ELEMENT hits (#PCDATA|control|cnt|ctr)*>
+<!ELEMENT kicks (#PCDATA|control|cnt|ctr)*>
+<!ELEMENT strokes (#PCDATA|control|cnt|ctr)*>
+<!ELEMENT hs (#PCDATA|control|cnt|ctr)*>
+<!ELEMENT pattern (#PCDATA|control|cnt|ctr)*>
+<!ELEMENT p (#PCDATA|control|cnt|ctr)*>
+
+<!ATTLIST rest
+	length	CDATA #IMPLIED
+	length_	CDATA #IMPLIED
+	bpm	CDATA #IMPLIED
+	bpm_	CDATA #IMPLIED
+	part	CDATA #IMPLIED
+	part_	CDATA #IMPLIED
+	db	CDATA #IMPLIED
+	db_	CDATA #IMPLIED
+	drum	CDATA #IMPLIED
+>
+<!ATTLIST pause
+	length	CDATA #IMPLIED
+	length_	CDATA #IMPLIED
+	bpm	CDATA #IMPLIED
+	bpm_	CDATA #IMPLIED
+	part	CDATA #IMPLIED
+	part_	CDATA #IMPLIED
+	db	CDATA #IMPLIED
+	db_	CDATA #IMPLIED
+	drum	CDATA #IMPLIED
+>
+<!ATTLIST r
+	length	CDATA #IMPLIED
+	length_	CDATA #IMPLIED
+	bpm	CDATA #IMPLIED
+	bpm_	CDATA #IMPLIED
+	part	CDATA #IMPLIED
+	part_	CDATA #IMPLIED
+	db	CDATA #IMPLIED
+	db_	CDATA #IMPLIED
+	drum	CDATA #IMPLIED
+>
+<!ATTLIST hit
+	length	CDATA #IMPLIED
+	length_	CDATA #IMPLIED
+	bpm	CDATA #IMPLIED
+	bpm_	CDATA #IMPLIED
+	part	CDATA #IMPLIED
+	part_	CDATA #IMPLIED
+	db	CDATA #IMPLIED
+	db_	CDATA #IMPLIED
+	drum	CDATA #IMPLIED
+>
+
+<!ATTLIST kick
+	length	CDATA #IMPLIED
+	length_	CDATA #IMPLIED
+	bpm	CDATA #IMPLIED
+	bpm_	CDATA #IMPLIED
+	part	CDATA #IMPLIED
+	part_	CDATA #IMPLIED
+	db	CDATA #IMPLIED
+	db_	CDATA #IMPLIED
+	drum	CDATA #IMPLIED
+>
+
+<!ATTLIST stoke
+	length	CDATA #IMPLIED
+	length_	CDATA #IMPLIED
+	bpm	CDATA #IMPLIED
+	bpm_	CDATA #IMPLIED
+	part	CDATA #IMPLIED
+	part_	CDATA #IMPLIED
+	db	CDATA #IMPLIED
+	db_	CDATA #IMPLIED
+	drum	CDATA #IMPLIED
+>
+
+<!ATTLIST h
+	length	CDATA #IMPLIED
+	length_	CDATA #IMPLIED
+	bpm	CDATA #IMPLIED
+	bpm_	CDATA #IMPLIED
+	part	CDATA #IMPLIED
+	part_	CDATA #IMPLIED
+	db	CDATA #IMPLIED
+	db_	CDATA #IMPLIED
+	drum	CDATA #IMPLIED
+>
+
+<!ATTLIST hits
+	length	CDATA #IMPLIED
+	length_	CDATA #IMPLIED
+	bpm	CDATA #IMPLIED
+	bpm_	CDATA #IMPLIED
+	part	CDATA #IMPLIED
+	part_	CDATA #IMPLIED
+	db	CDATA #IMPLIED
+	db_	CDATA #IMPLIED
+	drum	CDATA #IMPLIED
+>
+
+<!ATTLIST kicks
+	length	CDATA #IMPLIED
+	length_	CDATA #IMPLIED
+	bpm	CDATA #IMPLIED
+	bpm_	CDATA #IMPLIED
+	part	CDATA #IMPLIED
+	part_	CDATA #IMPLIED
+	db	CDATA #IMPLIED
+	db_	CDATA #IMPLIED
+	drum	CDATA #IMPLIED
+>
+
+<!ATTLIST strokes
+	length	CDATA #IMPLIED
+	length_	CDATA #IMPLIED
+	bpm	CDATA #IMPLIED
+	bpm_	CDATA #IMPLIED
+	part	CDATA #IMPLIED
+	part_	CDATA #IMPLIED
+	db	CDATA #IMPLIED
+	db_	CDATA #IMPLIED
+	drum	CDATA #IMPLIED
+>
+
+<!ATTLIST hs
+	length	CDATA #IMPLIED
+	length_	CDATA #IMPLIED
+	bpm	CDATA #IMPLIED
+	bpm_	CDATA #IMPLIED
+	part	CDATA #IMPLIED
+	part_	CDATA #IMPLIED
+	db	CDATA #IMPLIED
+	db_	CDATA #IMPLIED
+	drum	CDATA #IMPLIED
+>
+
+<!ATTLIST pattern
+	length	CDATA #IMPLIED
+	length_	CDATA #IMPLIED
+	bpm	CDATA #IMPLIED
+	bpm_	CDATA #IMPLIED
+	part	CDATA #IMPLIED
+	part_	CDATA #IMPLIED
+	db	CDATA #IMPLIED
+	db_	CDATA #IMPLIED
+	drum	CDATA #IMPLIED
+>
+
+
+<!ATTLIST p
+	length	CDATA #IMPLIED
+	length_	CDATA #IMPLIED
+	bpm	CDATA #IMPLIED
+	bpm_	CDATA #IMPLIED
+	part	CDATA #IMPLIED
+	part_	CDATA #IMPLIED
+	db	CDATA #IMPLIED
+	db_	CDATA #IMPLIED
+	drum	CDATA #IMPLIED
+>
+
