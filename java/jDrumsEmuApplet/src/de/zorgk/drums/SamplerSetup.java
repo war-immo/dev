@@ -22,6 +22,8 @@ public class SamplerSetup {
 	
 	public float speedFactor=1.f;
 	
+	private EmuApplet applet;
+	
 
 	public static final String[] named_resources = { "kick1",
 			"../res/kick-a.wav", "kick2", "../res/kick-b.wav", "snare",
@@ -49,9 +51,11 @@ public class SamplerSetup {
 	 */
 	public Map<String, HitInterface> instruments;
 
-	public SamplerSetup(AudioFormat format)
+	public SamplerSetup(AudioFormat format, EmuApplet applet)
 			throws UnsupportedAudioFileException, IOException,
 			URISyntaxException {
+		
+		this.applet = applet;
 
 		drums = new SampledDrum[named_resources.length / 2];
 		for (int i = 0; i < drums.length; ++i) {
@@ -145,5 +149,9 @@ public class SamplerSetup {
 		for (int i = 0; i < drums.length; ++i) {
 			drums[i].addToBuffer(framestart, o_buffer, samples, offset);
 		}
+	}
+	
+	public void out(String line) {
+		applet.out(line);
 	}
 }

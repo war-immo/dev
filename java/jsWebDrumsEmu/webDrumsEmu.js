@@ -23,7 +23,7 @@ function addApplet(name, file, cname) {
 	document.write("<applet name=\""+name+
 			"\" archive=\""+file+
 			"\" code=\""+cname+
-			"\"  MAYSCRIPT width=\"800\" height=\"600\" > </applet>");
+			"\"  MAYSCRIPT width=\"800\" height=\"560\" > </applet>");
 }
 
 

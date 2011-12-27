@@ -38,6 +38,8 @@ public class EmuApplet extends JApplet {
 	private volatile int line_buffer_size = 4096 * channels * 4;
 
 	private volatile Thread player = null;
+	
+	private final EmuApplet parent;
 
 	private CommunicationStream to_line = new CommunicationStream();
 
@@ -84,7 +86,7 @@ public class EmuApplet extends JApplet {
 			
 			SamplerSetup sampler = null;
 			try {
-				sampler = new SamplerSetup(format);
+				sampler = new SamplerSetup(format, parent);
 			} catch (UnsupportedAudioFileException e) {
 				out("UnsuppoertedAudioFileException " + e.toString());
 
@@ -220,7 +222,8 @@ public class EmuApplet extends JApplet {
 	 */
 	public EmuApplet() {
 
-		final EmuApplet parent = this;
+		this.parent = this;
+		
 
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.BOTTOM);
 		tabbedPane
@@ -310,11 +313,12 @@ public class EmuApplet extends JApplet {
 			}
 		});
 		toolBar.add(btnAddRiffXml);
-
+		final JFileChooser fc = new JFileChooser();
+		
 		JButton btnSave = new JButton("Save");
 		btnSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				JFileChooser fc = new JFileChooser();
+				
 
 				if (fc.showSaveDialog(parent) == JFileChooser.APPROVE_OPTION) {
 					try {
@@ -345,11 +349,13 @@ public class EmuApplet extends JApplet {
 				slider.setMaximum(200);
 				toolBar.add(slider);
 		toolBar.add(btnSave);
+		
+	
 
 		JButton btnLoad = new JButton("Load");
 		btnLoad.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JFileChooser fc = new JFileChooser();
+				
 
 				if (fc.showOpenDialog(parent) == JFileChooser.APPROVE_OPTION) {
 
