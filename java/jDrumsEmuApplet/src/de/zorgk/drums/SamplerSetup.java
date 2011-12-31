@@ -26,8 +26,8 @@ public class SamplerSetup {
 	
 
 	public static final String[] named_resources = { "kick1",
-			"../res/kick-a.wav", "kick2", "../res/kick-b.wav", "snare",
-			"../res/snare.wav", "hh-bell", "../res/hh-bell.wav", "hh-cord",
+			"../res/kick-a.wav", "kick2", "../res/kick-b.wav", "snare_quick","../res/snare_quick.wav",
+			"snare_slow","../res/snare_slow.wav", "hh-bell", "../res/hh-bell.wav", "hh-cord",
 			"../res/hh-closed-0.wav", "hh-ctop", "../res/hh-closed-1.wav",
 			"hh-oord", "../res/hh-open-0.wav", "hh-otop",
 			"../res/hh-open-1.wav", "rd-bell", "../res/ride_bell.wav",
@@ -44,6 +44,11 @@ public class SamplerSetup {
 
 	public static final String[][] round_robin_names = { { "kick", "kick1",
 			"kick2" } };
+	
+	public static float general_offset_db = -10.f;
+	
+	public static final String[] override_offset_db = {"snare_slow", "0",
+		"snare_quick","-2.0", "kick1","-20","kick2","-20"};
 
 	public SampledDrum[] drums;
 	/**
@@ -56,17 +61,25 @@ public class SamplerSetup {
 			URISyntaxException {
 		
 		this.applet = applet;
+		
+		/**
+		 * basic HitInterfaces
+		 */
 
 		drums = new SampledDrum[named_resources.length / 2];
 		for (int i = 0; i < drums.length; ++i) {
 			drums[i] = new SampledDrum(named_resources[i * 2 + 1], format);
-			drums[i].setOffsetDb(-10.f);
+			drums[i].setOffsetDb(general_offset_db);
 		}
 
 		instruments = new HashMap<String, HitInterface>();
 		for (int i = 0; i < drums.length; ++i) {
 			instruments.put(named_resources[i * 2], drums[i]);
 		}
+		
+		/**
+		 * RoundRobin Interfaces
+		 */
 
 		for (int i = 0; i < round_robin_names.length; ++i) {
 			RoundRobin r = new RoundRobin(
@@ -76,6 +89,10 @@ public class SamplerSetup {
 			}
 			instruments.put(round_robin_names[i][0], r);
 		}
+		
+		/**
+		 * cymbals
+		 */
 
 		instruments.put("hh", new HihatMixer(instruments.get("hh-oord"),
 				instruments.get("hh-otop"), instruments.get("hh-cord"),
@@ -106,10 +123,24 @@ public class SamplerSetup {
 		instruments.put("9", instruments.get("9-ord"));
 		
 		/**
+		 * drums
+		 */
+		
+		instruments.put("snare", new QuickRateMixer(instruments.get("snare_slow"),
+				instruments.get("snare_quick"), 0.2f, 0.2f, 250));
+		
+		/**
 		 * some level adjustments
 		 */
 		
-		((SampledDrum) instruments.get("snare")).setOffsetDb(0.f);
+		for (int i=0;i<override_offset_db.length-1;i+=2) {
+		
+			SampledDrum drum = (SampledDrum) instruments.get(override_offset_db[i]);
+			drum.setOffsetDb(Float.parseFloat(override_offset_db[i+1]));
+			
+		}
+		
+		
 		
 	}
 	
