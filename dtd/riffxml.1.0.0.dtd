@@ -1,4 +1,21 @@
 <!ELEMENT riff ANY>
+
+<!ATTLIST riff
+	length	CDATA #IMPLIED
+	length_	CDATA #IMPLIED
+	bpm	CDATA #IMPLIED
+	bpm_	CDATA #IMPLIED
+	part	CDATA #IMPLIED
+	part_	CDATA #IMPLIED
+	db	CDATA #IMPLIED
+	db_	CDATA #IMPLIED
+	drum	CDATA #IMPLIED
+>
+
+<!ELEMENT ignore ANY>
+<!ELEMENT skip ANY>
+
+
 <!ELEMENT chain ANY>
 <!ELEMENT meta ANY>
 <!ELEMENT c ANY>

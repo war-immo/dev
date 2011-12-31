@@ -42,11 +42,6 @@ public class RiffXmlHandler extends DefaultHandler {
 
 	public void startElement(String uri, String localName, String qName,
 			Attributes attributes) throws SAXException {
-		/**
-		 * the root element needs no handling
-		 */
-		if (qName.equals("riff"))
-			return;
 
 		RiffXmlAttributes attrs = new RiffXmlAttributes(attributeStack.peek(),
 				attributes);
@@ -83,7 +78,10 @@ public class RiffXmlHandler extends DefaultHandler {
 				|| qName.equalsIgnoreCase("ctr")) {
 			riffStack.push(new XmlControl(riffStack.peek(), attributeStack
 					.peek()));
-		} else { // unknown or decorating tag, use XmlDistribute
+		} else if (qName.equalsIgnoreCase("skip")
+				|| qName.equalsIgnoreCase("ignore")) {
+			riffStack.push(new XmlSkip());
+		} else { // unknown or decorating tag or riff tag, use XmlDistribute
 			riffStack.push(new XmlDistribute(riffStack.peek()));
 		}
 	}
@@ -94,11 +92,7 @@ public class RiffXmlHandler extends DefaultHandler {
 
 	public void endElement(String uri, String localName, String qName)
 			throws SAXException {
-		/**
-		 * the root element needs no handling
-		 */
-		if (qName.equals("riff"))
-			return;
+
 
 		attributeStack.pop();
 		RiffXmlInterface top = riffStack.pop();
