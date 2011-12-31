@@ -45,7 +45,7 @@ public class SamplerSetup {
 	public static final String[][] round_robin_names = { { "kick", "kick1",
 			"kick2" } };
 	
-	public static float general_offset_db = -10.f;
+	public static float general_offset_db = -16.f;
 	
 	public static final String[] override_offset_db = {"snare_slow", "0",
 		"snare_quick","-2.0", "kick1","-20","kick2","-20"};
