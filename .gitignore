@@ -17,6 +17,7 @@ doc/*.thm
 output*
 *.jar
 lib
+bin
 resources
 classes
 pom.xml
