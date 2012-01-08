@@ -59,6 +59,9 @@ public class RiffExporter {
 		long frames_elapsed = 0;
 		
 		AudioFormat format = new AudioFormat(new Float(EmuApplet.sRate), 32, EmuApplet.channels, true,
+				true);
+		
+		AudioFormat format_extern = new AudioFormat(new Float(EmuApplet.sRate), 32, EmuApplet.channels, true,
 				false);
 		
 		SamplerSetup sampler = null;
@@ -123,7 +126,7 @@ public class RiffExporter {
 					f = Integer.MIN_VALUE;
 				else
 					f = (int) l;
-				/* little-endian! */
+				/* little-endian output format */
 				b_buffer[b_idx + 3] = (byte) (f >> 24);
 				b_buffer[b_idx + 2] = (byte) (f >> 16);
 				b_buffer[b_idx + 1] = (byte) (f >> 8);
@@ -138,7 +141,7 @@ public class RiffExporter {
 		System.out.println("exported frames = "+(frames_elapsed));
 		
 		ByteArrayInputStream is = new ByteArrayInputStream(buffer.toByteArray());
-		AudioInputStream ais = new AudioInputStream(is, format, frames_elapsed);
+		AudioInputStream ais = new AudioInputStream(is, format_extern, frames_elapsed);
 		
 		FileOutputStream os = new FileOutputStream(file);
 		
