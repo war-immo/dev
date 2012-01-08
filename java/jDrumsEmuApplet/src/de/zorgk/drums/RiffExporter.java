@@ -15,24 +15,32 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 
 import com.sun.media.sound.WaveFileWriter;
 
+/**
+ * class that provides facilities to export Riff XML data to a wav file
+ * @author immanuel
+ *
+ */
+
 public class RiffExporter {
 	
 	public static class EndOfRiff implements RiffInterface {
 		
-		private boolean eof;
+		private static long eof = EmuApplet.sRate * 10; //add 10 seconds after last hit for decay
+		private long elapsed_frames;
 		
 		public EndOfRiff() {
-			eof = false;
+			
+			elapsed_frames = 0;
 		}
 		
 		public boolean isDone() {
-			return eof;
+			return elapsed_frames >= eof;
 		}
 		
 		@Override
 		public boolean timeElapse(long framestart, long framenextstart,
 				LinkedList<RiffInterface> stack, SamplerSetup sampler) {
-			eof = true;
+			elapsed_frames += framenextstart - framestart;
 			
 			return false;
 		}
@@ -149,8 +157,6 @@ public class RiffExporter {
 		writer.write(ais, AudioFileFormat.Type.WAVE, os);
 		
 		os.close();
-		
-		
 		
 	}
 
