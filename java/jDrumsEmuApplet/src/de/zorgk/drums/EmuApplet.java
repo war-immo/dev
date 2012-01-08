@@ -32,9 +32,9 @@ public class EmuApplet extends JApplet {
 	 */
 	private static final long serialVersionUID = 3218208748277098775L;
 
-	private static final int sRate = 44100;
-	private static final int channels = 2;
-	private static final int buffer_frames = 64;
+	public static final int sRate = 44100;
+	public static final int channels = 2;
+	public static final int buffer_frames = 64;
 	private volatile int line_buffer_size = 4096 * channels * 4;
 
 	private volatile Thread player = null;
@@ -223,6 +223,7 @@ public class EmuApplet extends JApplet {
 	public EmuApplet() {
 
 		this.parent = this;
+		//this.parent = null;
 		
 
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.BOTTOM);
@@ -383,6 +384,28 @@ public class EmuApplet extends JApplet {
 			}
 		});
 		toolBar.add(btnLoad);
+		
+		JButton btnExport = new JButton("Export Riff XML");
+		
+		btnExport.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+
+				if (fc.showSaveDialog(parent) == JFileChooser.APPROVE_OPTION) {
+					try {
+						
+
+						RiffExporter.Export(fc.getSelectedFile(), textRiffXml.getText(), parent);
+						
+					} catch (Exception ex) {
+						ex.printStackTrace();
+					}
+				}
+
+			}
+		});
+		
+		toolBar.add(btnExport);
 
 		textRiffXml = new JTextArea();
 		textRiffXml
