@@ -1,8 +1,11 @@
 package de.zorgk.drums;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.LinkedList;
 
 import org.xml.sax.Attributes;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
@@ -39,7 +42,7 @@ public class RiffXmlHandler extends DefaultHandler {
 	/**
 	 * element starts, push it on the stack
 	 */
-
+	@Override
 	public void startElement(String uri, String localName, String qName,
 			Attributes attributes) throws SAXException {
 
@@ -89,7 +92,7 @@ public class RiffXmlHandler extends DefaultHandler {
 	/**
 	 * element ends do riff output
 	 */
-
+	@Override
 	public void endElement(String uri, String localName, String qName)
 			throws SAXException {
 
@@ -102,10 +105,19 @@ public class RiffXmlHandler extends DefaultHandler {
 	/**
 	 * receive data
 	 */
-
+	@Override
 	public void characters(char ch[], int start, int length)
 			throws SAXException {
 		riffStack.peek().characters(new String(ch, start, length));
 	}
 
+	@Override
+	public InputSource resolveEntity(String publicId, String systemId)
+			throws IOException, SAXException {
+
+		// TODO RETURN CORRECT DTD FILE
+
+		return new InputSource(new ByteArrayInputStream(
+				"<?xml version='1.0' encoding='UTF-8'?>".getBytes()));
+	}
 }

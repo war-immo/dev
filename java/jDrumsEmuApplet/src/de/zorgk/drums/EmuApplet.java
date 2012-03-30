@@ -1,27 +1,48 @@
 package de.zorgk.drums;
 
-import javax.sound.sampled.*;
-import javax.swing.*;
-
 import java.awt.BorderLayout;
-import javax.swing.border.EtchedBorder;
-import java.awt.Panel;
+import java.awt.Color;
 import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.Panel;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
-import java.util.*;
+import java.util.LinkedList;
 
-import javax.swing.event.ListSelectionListener;
-import javax.swing.event.ListSelectionEvent;
-import java.awt.event.*;
-import java.awt.Font;
-import java.awt.Color;
-import javax.swing.event.ChangeListener;
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.DataLine;
+import javax.sound.sampled.Line;
+import javax.sound.sampled.LineEvent;
+import javax.sound.sampled.LineListener;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.SourceDataLine;
+import javax.sound.sampled.UnsupportedAudioFileException;
+import javax.swing.JApplet;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSlider;
+import javax.swing.JTabbedPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.JToolBar;
+import javax.swing.SwingConstants;
+import javax.swing.border.EtchedBorder;
 import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 public class EmuApplet extends JApplet {
 
@@ -409,7 +430,17 @@ public class EmuApplet extends JApplet {
 
 		textRiffXml = new JTextArea();
 		textRiffXml
-				.setText("<?xml version=\"1.0\"?>\n<!DOCTYPE riff SYSTEM \"https://raw.github.com/war-immo/dev/master/dtd/riffxml.1.0.0.dtd\">\n<riff>\n\t<chain Repeat=\"2\" bpm=\"160\">\n\t\t<syn>\n\t\t\t<hs length=\"4\" drum=\"kick\" part=\"0.25\"/>\n\t\t\t<pattern length=\"4\" part=\"0.5\" drum=\"snare\">+-+--++-</pattern>\n\t\t\t<hs length=\"4\" drum=\"hh\" part=\"0.5\">\n\t\t\t\t<control>openXclosed=0.1</control>\n\t\t\t</hs>\n\t\t</syn>\n\t\t<syn>\n\t\t\t<hs length=\"4\" drum=\"kick\" part=\"0.25\"/>\n\t\t\t<pattern length=\"4\" part=\"0.5\" drum=\"snare\">+-+--++-</pattern>\n\t\t\t<hs length=\"4\" drum=\"hh\" part=\"0.5\">\n\t\t\t\t<control>openXclosed=0.8</control>\n\t\t\t</hs>\n\t\t</syn>\n\t</chain>\n</riff>\n");
+				.setText("<?xml version=\"1.0\"?>\n"
+						+ "<!DOCTYPE riff SYSTEM \"https://raw.github.com/war-immo/dev/master/dtd/riffxml.1.0.0.dtd\">\n"
+						+ "<riff>\n"
+						+ "	<chain Repeat=\"32\" bpm=\"180\">\n"
+						+ "		<syn>\n"
+						+ "			<hs length=\"4\" drum=\"kick\" part=\"0.25\"/>\n"
+						+ "			<pattern length=\"4\" part=\"0.5\" drum=\"snare\">--+---+---</pattern>\n"
+						+ "			<hs length=\"4\" drum=\"hh\" part=\"0.5\">\n"
+						+ "				<control>openXclosed=0.1</control>\n"
+						+ "			</hs>\n" + "		</syn>\n" + "	</chain>\n"
+						+ "</riff>");
 		textRiffXml.setBackground(Color.WHITE);
 		textRiffXml.setFont(new Font("Courier", Font.BOLD, 16));
 		scrollPane_1.setViewportView(textRiffXml);
@@ -417,7 +448,10 @@ public class EmuApplet extends JApplet {
 		out("Build: " + build_nbr);
 		out("Desired format: " + format.toString());
 
-		initLine(0);
+		tabbedPane.setSelectedIndex(2);
+
+		initLine(lines.length - 1);
+		list.setSelectedIndex(lines.length - 1);
 
 		out("de.zorgk.drums.EmuApplet initalization completed.");
 	}
