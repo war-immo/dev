@@ -7,11 +7,14 @@ import java.awt.Font;
 import java.awt.Panel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.util.LinkedList;
 
@@ -59,7 +62,7 @@ public class EmuApplet extends JApplet {
 	private volatile int line_buffer_size = 4096 * channels * 4;
 
 	private volatile Thread player = null;
-	
+
 	private final EmuApplet parent;
 
 	private CommunicationStream to_line = new CommunicationStream();
@@ -104,7 +107,7 @@ public class EmuApplet extends JApplet {
 			long[] i_buffer = new long[channels * buffer_frames];
 
 			long frames_elapsed = 0;
-			
+
 			SamplerSetup sampler = null;
 			try {
 				sampler = new SamplerSetup(format, parent);
@@ -202,7 +205,7 @@ public class EmuApplet extends JApplet {
 						}
 						break;
 					case 4:
-						sampler.speedFactor = (Float)o *0.01f;
+						sampler.speedFactor = (Float) o * 0.01f;
 						break;
 					default:
 						out("\nunknown to_line: " + nbr + ", " + o.toString());
@@ -244,8 +247,7 @@ public class EmuApplet extends JApplet {
 	public EmuApplet() {
 
 		this.parent = this;
-		//this.parent = null;
-		
+		// this.parent = null;
 
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.BOTTOM);
 		tabbedPane
@@ -336,11 +338,10 @@ public class EmuApplet extends JApplet {
 		});
 		toolBar.add(btnAddRiffXml);
 		final JFileChooser fc = new JFileChooser();
-		
+
 		JButton btnSave = new JButton("Save");
 		btnSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				
 
 				if (fc.showSaveDialog(parent) == JFileChooser.APPROVE_OPTION) {
 					try {
@@ -354,37 +355,34 @@ public class EmuApplet extends JApplet {
 				}
 			}
 		});
-		
-				JSlider slider = new JSlider();
-				slider.addChangeListener(new ChangeListener() {
-					
-					public void stateChanged(ChangeEvent arg0) {
-						
-						to_line.push(4, new Float(((JSlider)arg0.getSource()).getValue()));
-					}
-				});
-				slider.setMinorTickSpacing(5);
-				slider.setMajorTickSpacing(25);
-				slider.setPaintTicks(true);
-				slider.setToolTipText("speed factor");
-				slider.setValue(100);
-				slider.setMaximum(200);
-				toolBar.add(slider);
+
+		JSlider slider = new JSlider();
+		slider.addChangeListener(new ChangeListener() {
+
+			public void stateChanged(ChangeEvent arg0) {
+
+				to_line.push(4,
+						new Float(((JSlider) arg0.getSource()).getValue()));
+			}
+		});
+		slider.setMinorTickSpacing(5);
+		slider.setMajorTickSpacing(25);
+		slider.setPaintTicks(true);
+		slider.setToolTipText("speed factor");
+		slider.setValue(100);
+		slider.setMaximum(200);
+		toolBar.add(slider);
 		toolBar.add(btnSave);
-		
-	
 
 		JButton btnLoad = new JButton("Load");
 		btnLoad.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
 
 				if (fc.showOpenDialog(parent) == JFileChooser.APPROVE_OPTION) {
 
 					byte[] buffer = new byte[(int) fc.getSelectedFile()
 							.length()];
-					
-					
+
 					InputStream s;
 					try {
 						s = new FileInputStream(fc.getSelectedFile());
@@ -398,26 +396,24 @@ public class EmuApplet extends JApplet {
 
 						e2.printStackTrace();
 					}
-					
 
 				}
 
 			}
 		});
 		toolBar.add(btnLoad);
-		
+
 		JButton btnExport = new JButton("Export Riff XML");
-		
+
 		btnExport.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
 
 				if (fc.showSaveDialog(parent) == JFileChooser.APPROVE_OPTION) {
 					try {
-						
 
-						RiffExporter.Export(fc.getSelectedFile(), textRiffXml.getText(), parent);
-						
+						RiffExporter.Export(fc.getSelectedFile(),
+								textRiffXml.getText(), parent);
+
 					} catch (Exception ex) {
 						ex.printStackTrace();
 					}
@@ -425,7 +421,7 @@ public class EmuApplet extends JApplet {
 
 			}
 		});
-		
+
 		toolBar.add(btnExport);
 
 		textRiffXml = new JTextArea();
@@ -513,14 +509,78 @@ public class EmuApplet extends JApplet {
 
 	public static void main(String[] args) {
 
-		EmuApplet applet = new EmuApplet();
+		if (args.length > 0) {
 
-		JFrame frame = new JFrame("de.zorgk.drums.EmuApplet");
-		frame.getContentPane().add(applet);
+			boolean print_help = false;
 
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.pack();
-		frame.setVisible(true);
+			if (args[0].equalsIgnoreCase("--export")) {
 
+				if (args.length == 3) {
+
+					EmuApplet applet = new EmuApplet();
+
+					String riff = null;
+
+					try {
+						InputStreamReader reader = new InputStreamReader(
+								new FileInputStream(args[1]), "UTF-8");
+
+						StringBuffer file_data = new StringBuffer(1000);
+
+						char[] buf = new char[1024];
+
+						int num_read = 0;
+
+						try {
+							while ((num_read = reader.read(buf)) != -1) {
+								String readData = String.valueOf(buf, 0,
+										num_read);
+								file_data.append(readData);
+								buf = new char[1024];
+							}
+							reader.close();
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+
+						riff = file_data.toString();
+					} catch (UnsupportedEncodingException e1) {
+
+						e1.printStackTrace();
+					} catch (FileNotFoundException e1) {
+
+						e1.printStackTrace();
+					}
+
+					try {
+						RiffExporter.Export(new File(args[2]), riff, applet);
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+
+					System.exit(0);
+
+				} else
+					print_help = true;
+
+			} else
+				print_help = true;
+
+			if (print_help) {
+				System.out
+						.println("Usage: java -jar drumsEmu.jar [--export XML-INPUT WAV-OUTPUT]");
+			}
+
+		} else {
+
+			EmuApplet applet = new EmuApplet();
+
+			JFrame frame = new JFrame("de.zorgk.drums.EmuApplet");
+			frame.getContentPane().add(applet);
+
+			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			frame.pack();
+			frame.setVisible(true);
+		}
 	}
 }

@@ -26,13 +26,15 @@ public class XmlHandler extends DefaultHandler {
 	private OutputStreamWriter out;
 	private Vector<Integer> chord;
 	private boolean chordPart;
-	private boolean palmMute, slurOn, slurOff, glissando, squeal;
+	private boolean palmMute, slurOn, slurOff, glissando, squeal, dotted;
 	private String suffixes;
 	private String length;
 	private String oldLength;
 	private int string;
 	private int fret;
 	private String data;
+
+	private int nominator, denominator;
 
 	private boolean ignore;
 
@@ -41,6 +43,9 @@ public class XmlHandler extends DefaultHandler {
 	private boolean wasRepeat;
 
 	public static final int STRINGS = 7;
+	public static final int BARNBRS = 5;
+
+	private int barcount;
 
 	public XmlHandler(OutputStream out) {
 		qNames = new Stack<String>();
@@ -61,6 +66,7 @@ public class XmlHandler extends DefaultHandler {
 		repeat = false;
 		wasRepeat = false;
 		suffixes = "";
+		barcount = 0;
 	}
 
 	public void flush() {
@@ -77,6 +83,11 @@ public class XmlHandler extends DefaultHandler {
 
 			if (gtOpen == false) {
 				try {
+					if (barcount % BARNBRS == 0) {
+						out.write("         \\nbr \"" + barcount + "\"\n");
+
+					}
+
 					out.write("         \\gte \"  ");
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -171,6 +182,8 @@ public class XmlHandler extends DefaultHandler {
 				wasRepeat = repeat;
 				repeat = false;
 
+				++barcount;
+
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -219,7 +232,14 @@ public class XmlHandler extends DefaultHandler {
 			glissando = false;
 			string = -1;
 			squeal = false;
+			dotted = false;
+			nominator = -1;
+			denominator = -1;
 			fret = -1;
+		}
+
+		if (qName.equalsIgnoreCase("dot")) {
+			dotted = true;
 		}
 
 		if (qName.equalsIgnoreCase("chord")) {
@@ -245,8 +265,12 @@ public class XmlHandler extends DefaultHandler {
 
 				if (repeat)
 					out.write("         \\bar \":|\"\n");
-				else
-					out.write("         \\bar \"|\"\n");
+				else {
+					if (gtOpen)
+						out.write("         \\bar \"|\"\n");
+					else
+						out.write("         \\bar \"||\"\n");
+				}
 
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -281,6 +305,9 @@ public class XmlHandler extends DefaultHandler {
 				suffixes += "s";
 
 			oldLength = length;
+
+			if (dotted)
+				oldLength += ".";
 		}
 
 		if (qName.equalsIgnoreCase("string")) {
@@ -289,6 +316,14 @@ public class XmlHandler extends DefaultHandler {
 
 		if (qName.equalsIgnoreCase("fret")) {
 			fret = Integer.parseInt(data);
+		}
+
+		if (qName.equalsIgnoreCase("actual-notes")) {
+			denominator = Integer.parseInt(data);
+		}
+
+		if (qName.equalsIgnoreCase("normal-notes")) {
+			nominator = Integer.parseInt(data);
 		}
 
 		if (qName.equalsIgnoreCase("other-technical")) {
