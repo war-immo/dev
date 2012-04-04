@@ -34,9 +34,10 @@ public class XmlHandler extends DefaultHandler {
 	private int fret;
 	private String data;
 
-	private int nominator, denominator;
+	private int numerator, denominator, newNumerator, newDenominator;
 
 	private boolean ignore;
+	private int partCounter;
 
 	private boolean gtOpen;
 	private boolean repeat;
@@ -67,6 +68,7 @@ public class XmlHandler extends DefaultHandler {
 		wasRepeat = false;
 		suffixes = "";
 		barcount = 0;
+		partCounter = 0;
 	}
 
 	public void flush() {
@@ -93,6 +95,15 @@ public class XmlHandler extends DefaultHandler {
 					e.printStackTrace();
 				}
 				gtOpen = true;
+			}
+
+			if ((denominator > 0) && (numerator > 0)) {
+				try {
+					out.write("\" \\times " + numerator + "/" + denominator
+							+ " { \\gte \" ");
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 
 			int max_string = -1;
@@ -145,6 +156,14 @@ public class XmlHandler extends DefaultHandler {
 				out.write(oldLength);
 
 				out.write("  ");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+
+		if ((denominator > 0) && (numerator > 0)) {
+			try {
+				out.write("\" } \\gte \" ");
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -233,8 +252,8 @@ public class XmlHandler extends DefaultHandler {
 			string = -1;
 			squeal = false;
 			dotted = false;
-			nominator = -1;
-			denominator = -1;
+			newNumerator = -1;
+			newDenominator = -1;
 			fret = -1;
 		}
 
@@ -244,6 +263,18 @@ public class XmlHandler extends DefaultHandler {
 
 		if (qName.equalsIgnoreCase("chord")) {
 			chordPart = true;
+		}
+
+		if (qName.equalsIgnoreCase("part")) {
+			partCounter++;
+			barcount = 0;
+
+			try {
+				out.write("part" + ((char) ((int) ('A') + partCounter - 1))
+						+ " = {\n");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -304,6 +335,9 @@ public class XmlHandler extends DefaultHandler {
 			if (squeal)
 				suffixes += "s";
 
+			numerator = newNumerator;
+			denominator = newDenominator;
+
 			oldLength = length;
 
 			if (dotted)
@@ -319,11 +353,11 @@ public class XmlHandler extends DefaultHandler {
 		}
 
 		if (qName.equalsIgnoreCase("actual-notes")) {
-			denominator = Integer.parseInt(data);
+			newDenominator = Integer.parseInt(data);
 		}
 
 		if (qName.equalsIgnoreCase("normal-notes")) {
-			nominator = Integer.parseInt(data);
+			newNumerator = Integer.parseInt(data);
 		}
 
 		if (qName.equalsIgnoreCase("other-technical")) {
@@ -350,8 +384,15 @@ public class XmlHandler extends DefaultHandler {
 		}
 
 		if (qName.equalsIgnoreCase("part")) {
-			ignore = true;
+
+			try {
+				out.write("} %part" + ((char) ((int) ('A') + partCounter - 1))
+						+ "\n");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
+
 	}
 
 	@Override
