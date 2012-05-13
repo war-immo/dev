@@ -46,6 +46,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class EmuApplet extends JApplet {
 
@@ -337,15 +338,19 @@ public class EmuApplet extends JApplet {
 			}
 		});
 		toolBar.add(btnAddRiffXml);
-		final JFileChooser fc = new JFileChooser();
+		final JFileChooser fcxml = new JFileChooser();
+		final JFileChooser fcwav = new JFileChooser();
+		fcxml.setFileFilter(new FileNameExtensionFilter("RIFF XML", "XML"));
+		fcwav.setFileFilter(new FileNameExtensionFilter("WAVe audio", "WAV"));
 
-		JButton btnSave = new JButton("Save");
+		JButton btnSave = new JButton("Save XML");
 		btnSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 
-				if (fc.showSaveDialog(parent) == JFileChooser.APPROVE_OPTION) {
+				if (fcxml.showSaveDialog(parent) == JFileChooser.APPROVE_OPTION) {
 					try {
-						FileWriter writer = new FileWriter(fc.getSelectedFile());
+						FileWriter writer = new FileWriter(fcxml
+								.getSelectedFile());
 
 						writer.write(textRiffXml.getText());
 						writer.close();
@@ -374,18 +379,18 @@ public class EmuApplet extends JApplet {
 		toolBar.add(slider);
 		toolBar.add(btnSave);
 
-		JButton btnLoad = new JButton("Load");
+		JButton btnLoad = new JButton("Load XML");
 		btnLoad.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				if (fc.showOpenDialog(parent) == JFileChooser.APPROVE_OPTION) {
+				if (fcxml.showOpenDialog(parent) == JFileChooser.APPROVE_OPTION) {
 
-					byte[] buffer = new byte[(int) fc.getSelectedFile()
+					byte[] buffer = new byte[(int) fcxml.getSelectedFile()
 							.length()];
 
 					InputStream s;
 					try {
-						s = new FileInputStream(fc.getSelectedFile());
+						s = new FileInputStream(fcxml.getSelectedFile());
 						s.read(buffer);
 						textRiffXml.setText(new String(buffer));
 						s.close();
@@ -403,15 +408,15 @@ public class EmuApplet extends JApplet {
 		});
 		toolBar.add(btnLoad);
 
-		JButton btnExport = new JButton("Export Riff XML");
+		JButton btnExport = new JButton("Export -> .WAV");
 
 		btnExport.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				if (fc.showSaveDialog(parent) == JFileChooser.APPROVE_OPTION) {
+				if (fcwav.showSaveDialog(parent) == JFileChooser.APPROVE_OPTION) {
 					try {
 
-						RiffExporter.Export(fc.getSelectedFile(),
+						RiffExporter.Export(fcwav.getSelectedFile(),
 								textRiffXml.getText(), parent);
 
 					} catch (Exception ex) {
