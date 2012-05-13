@@ -241,6 +241,36 @@ public class EmuApplet extends JApplet {
 	JTextArea textArea = null;
 	private JTextField textField;
 	private JTextArea textRiffXml;
+	
+	/**
+	 * Stop current playback
+	 */
+	public void Stop() {
+		to_line.push(0, "Stop");
+	}
+	
+	/**
+	 * Pause current playback
+	 */
+	public void Pause() {
+		to_line.push(1, "Pause");
+	}
+	
+	/**
+	 * Step forward
+	 */
+	public void Next() {
+		to_line.push(2, "Next");
+	}
+	
+	/**
+	 * add riff
+	 * @param riff riff as xml
+	 */
+	 
+	public void AddThis(String riff) {
+		to_line.push(3, riff);
+	}
 
 	/**
 	 * Create the applet.
